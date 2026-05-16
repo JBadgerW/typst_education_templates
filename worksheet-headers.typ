@@ -1,4 +1,4 @@
-#include worksheet-utils: answer-blank
+#import "worksheet-utils.typ": answer-blank
 
 // worksheet-headers.typ
 
