@@ -1,3 +1,6 @@
+#import "worksheet-headers.typ": first-page-header
+#import "question-env.typ": question, parts, choices
+
 #set page(
   paper: "us-letter",
   margin: 0.75in
@@ -12,9 +15,6 @@
   justify: false,
   leading: 0.65em,
 )
-
-#import "worksheet-headers.typ": first-page-header
-#import "question-env.typ": question, parts, choices
 
 // ==================================================
 // DOCUMENT VARIABLES
