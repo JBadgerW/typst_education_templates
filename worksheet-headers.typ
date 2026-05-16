@@ -1,10 +1,6 @@
-// worksheet-headers.typ
+#include worksheet-utils: answer-blank
 
-#let answer-blank(width) = box(
-  width: width,
-  inset: 0pt,
-  stroke: (bottom: 0.7pt),
-)
+// worksheet-headers.typ
 
 #let first-page-header(class-name, worksheet-title, version: "1") = [
   #v(-0.25in)

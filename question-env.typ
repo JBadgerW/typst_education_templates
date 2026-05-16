@@ -1,27 +1,25 @@
 // Question Environment definitions
 // Usage: #question(points: which is optional)[body of question]
 //        #parts[] An inner environment for parts of a question
-//        #choices(arragnement: stacked, linear, grid)[] for 
+//        #choices(arrangement: stacked, linear, grid)[] for 
 //          multiple choice questions
 
 // Question counter
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, body) = {
+#let question(points: none, space-below: 2em, body) = {
   qnum.step()
 
   block(
-    below: 1.5em,
+    below: space-below,
   )[
     #grid(
       columns: (auto, 1fr, auto),
       column-gutter: 0.5em,
 
       [
-        #context{
-          qnum.display("1.")  
-        }
+        #context qnum.display("1.")  
       ],
 
       [
@@ -93,6 +91,8 @@
         )
       )
     )
+  } else {
+    panic("choices: unknown arrangement '" + arrangement + "'. Use vertical, linear, or grid.")
   }
 }
 
