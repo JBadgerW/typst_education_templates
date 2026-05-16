@@ -10,7 +10,7 @@ I think it will be a simpler option going forward. Not to mention requiring only
 instead of several GB just to use the thing.
 
 Right now I'm working on recreating some of the environments that in LaTeX would be taken care of by
-the exam class. Claude is a heavy partner in this work.
+the LaTeX exam class. Claude is a heavy partner in this work.
 
 Eventually, I want this to be a part of a comprehensive Python app for making educational instruments.
 We'll see.
