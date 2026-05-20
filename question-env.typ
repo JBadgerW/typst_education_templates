@@ -8,7 +8,7 @@
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, space-below: 2em, body) = {
+#let question(points: none, space-below: 1fr, body) = {
   qnum.step()
 
   block(
