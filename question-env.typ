@@ -4,15 +4,22 @@
 //        #choices(arrangement: stacked, linear, grid)[] for 
 //          multiple choice questions
 
+#let answer-blank(width) = box(
+  width: width,
+  inset: 0pt,
+  stroke: (bottom: 0.7pt),
+)
+
 // Question counter
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, space-below: 1fr, body) = {
+#let question(points: none, space-below: 2em, body) = {
   qnum.step()
 
   block(
     below: space-below,
+    breakable: false,
   )[
     #grid(
       columns: (auto, 1fr, auto),
@@ -20,17 +27,17 @@
 
       [
         #context qnum.display("1.")  
-      ],
+     ],
 
       [
         #body
-      ],
+     ],
 
       [
         #if points != none [
           (#points pts)
-        ]
-      ],
+       ]
+     ],
     )
   ]
 }
@@ -45,49 +52,44 @@
       #numbering("(a)", i + 1)
       #h(0.5em)
       #item
-    ])
+   ])
   )
 }
 
 // choices environment for multiple choice questions
 #let choices(arrangement: "vertical", ..items) = {
-  let labeled = items.pos().enumerate().map(((i, item)) => (
-    numbering("A.", i + 1),
-    item,
-  ))
+  let labeled = items.pos().enumerate().map(((i, item)) => {
+    let label = numbering("A.", i + 1)
+    let indent = 1.5em  // adjust to match label + gap width
+    block(
+      width: 100%,
+      grid(
+        columns: (indent, 1fr),
+        column-gutter: 0pt,
+        align(top, label),
+        block(width: 100%, [#set par(hanging-indent: 0em); #item]),
+      )
+    )
+  })
 
   if arrangement == "vertical" {
-    // Original behavior: one choice per line
-    stack(
-      dir: ttb,
-      spacing: 1em,
-      ..labeled.map(((label, item)) => [
-        #label #h(0.25em) #item
-      ])
-    )
-
+    stack(dir: ttb, spacing: 0.75em, ..labeled)
   } else if arrangement == "linear" {
-    // All choices on one line
-    labeled.map(((label, item)) => [
-      #label #h(0.25em) #item #h(1.5em)
-    ]).join()
-
+    labeled.join(h(1.5em))
   } else if arrangement == "grid" {
-    // chunk into pairs, padding with empty if odd
     let pairs = range(0, labeled.len(), step: 2).map(i => {
       let a = labeled.at(i)
       let b = if i + 1 < labeled.len() { labeled.at(i + 1) } else { none }
       (a, b)
     })
-
     stack(
       dir: ttb,
       spacing: 1em,
       ..pairs.map(((a, b)) =>
         grid(
           columns: (1fr, 1fr),
-          [#a.at(0) #h(0.25em) #a.at(1)],
-          if b != none [#b.at(0) #h(0.25em) #b.at(1)] else [],
+          a,
+          if b != none { b } else [],
         )
       )
     )
@@ -95,4 +97,8 @@
     panic("choices: unknown arrangement '" + arrangement + "'. Use vertical, linear, or grid.")
   }
 }
+
+// Point value label (right-aligned, used inline beside questions)
+#let pts(n) = h(1fr) + text(size: 9pt, fill: luma(100))[_(#n pt#if n != 1 [s])_]
+
 
