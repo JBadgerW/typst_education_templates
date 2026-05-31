@@ -17,23 +17,27 @@ We'll see.
 
 # Question Environments
 
-The question()[] environment allows you to set a question for the exam. It keeps track of the 
+The question()[] environment/function allows you to set a question for the exam. It keeps track of the 
 question's number (numbering them sequentially), allows you to add parts or choices environments to 
-enable parts or multiple choices, and works in any context (which makes it better than the LaTeX 
-exam class's question environment which gets confused by tables and stuff.)
+enable parts or multiple choices, and works in any context (which makes it better _in this way_ than 
+the LaTeX exam class's question environment which gets confused by tables and stuff.)
 
-N.b. the number of points passed to the question environment/function is optional. If you don't want
-to both with that (and I usually don't), just make it question()[question goes here].
+## Example usage
 
-## EXAMPLE USAGE
-
-*Short answer*
+### Short answer
 
 ```
 #question(points: 2)[How does Aristotle define 'virtue'?]
 ```
 
-*Multiple choice*
+N.b. the number of points passed to the question environment/function is optional. If you don't want
+to both with that (and I usually don't), just make it 
+
+```
+#question()[How does Aristotle define 'virtue'?]
+```
+
+### Multiple choice
 
 ```
 #question(points: 2)[
@@ -48,5 +52,5 @@ to both with that (and I usually don't), just make it question()[question goes h
 ```
 
 The example above illustrates how to use the choices environment to create a multiple choice question.
-(There is currently no way to have random shuffling of the choices, unlike the \begin{randomizechoices}
-environment that you get with the )
+There is, unfortunately, no way yet to have random shuffling of the choices, unlike the randomizechoices
+environment that you get with the LaTeX exam class. 
