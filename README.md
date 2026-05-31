@@ -44,7 +44,8 @@ to both with that (and I usually don't), just make it question()[question goes h
     [Nineveh],
     [I don't know that!],
   )
-]```
+]
+```
 
 The example above illustrates how to use the choices environment to create a multiple choice question.
 (There is currently no way to have random shuffling of the choices, unlike the \begin{randomizechoices}
