@@ -12,7 +12,8 @@
 )
 
 #set text(
-  font: "New Computer Modern",
+  //font: "New Computer Modern",
+  font: "Linux Libertine O",
   size: 12pt,
 )
 
@@ -124,6 +125,8 @@
     panic("choices: unknown arrangement '" + arrangement + "'. Use vertical, linear, or grid.")
   }
 }
+
+
 
 #let first-page-header(class-name, worksheet-title, version: "1") = [
   #v(-0.25in)
