@@ -38,29 +38,37 @@
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, space-below: 1fr, body) = {
+#let question(points: none, 
+  space-below: 2em, 
+  answer-line: none,
+  body
+) = {
   qnum.step()
 
   block(
     below: space-below,
+    breakable: false,
   )[
     #grid(
       columns: (auto, 1fr, auto),
       column-gutter: 0.5em,
 
       [
-        #context qnum.display("1.")  
-      ],
+        #context qnum.display("1.")
+        #if answer-line != none [
+          #answer-blank(answer-line)
+        ]
+     ],
 
       [
         #body
-      ],
+     ],
 
       [
         #if points != none [
           (#points pts)
-        ]
-      ],
+       ]
+     ],
     )
   ]
 }

@@ -153,7 +153,11 @@
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, space-below: 2em, body) = {
+#let question(points: none, 
+  space-below: 2em, 
+  answer-line: none,
+  body
+) = {
   qnum.step()
 
   block(
@@ -165,7 +169,10 @@
       column-gutter: 0.5em,
 
       [
-        #context qnum.display("1.")  
+        #context qnum.display("1.")
+        #if answer-line != none [
+          #answer-blank(answer-line)
+        ]
      ],
 
       [
