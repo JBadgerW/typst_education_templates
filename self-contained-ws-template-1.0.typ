@@ -41,8 +41,12 @@
 #let question(points: none, 
   space-below: 2em, 
   answer-line: none,
+  renum: none,
   body
 ) = {
+  if renum != none {
+    qnum.update(renum - 1)
+  }
   qnum.step()
 
   block(
