@@ -64,7 +64,7 @@
 // the section-banner() function can use it to display a certain number of points
 // to the right.
 #show heading.where(level: 1): it => {
-  v(10pt, weak: true)
+  v(30pt, weak: true)
   block(
     width:  100%,
     fill:   accent,
