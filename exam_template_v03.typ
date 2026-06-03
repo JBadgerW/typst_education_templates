@@ -6,9 +6,12 @@
 
 // ── Document metadata ────────────────────────────────────────────────────────
 
+#let exam-title = "[exam name]"
+#let exam-author = "[exam author]"
+
 #set document(
-  title:  "[exam name]",
-  author: "[exam author]",
+  title:  exam-title,
+  author: exam-author,
 )
 
 // ── Colour palette ────────────────────────────────────────────────────────────
@@ -31,7 +34,7 @@
       #set text(size: 9pt, fill: luma(120))
       #grid(
         columns: (1fr, 1fr),
-        align(left)[Humanities IV — Final Exam — 2025—2026],
+        align(left)[#exam-title],
         align(right)[Page #counter(page).display()],
       )
       #line(length: 100%, stroke: 0.5pt + rule-col)
