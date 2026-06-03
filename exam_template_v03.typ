@@ -4,8 +4,9 @@
 //  ► Fill in the capitalised placeholders (COURSE NAME, etc.) to customise.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Document metadata ────────────────────────────────────────────────────────
+// CONTENT STARTS ON LINE 275ish
 
+// ── Document metadata ────────────────────────────────────────────────────────
 #let exam-title = "[exam name]"
 #let exam-author = "[exam author]"
 
