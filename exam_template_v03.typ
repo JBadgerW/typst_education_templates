@@ -111,7 +111,7 @@
 // Smaller coloured header — use for sub-sections or question groups
 #let subsection-banner(title, points: none) = {
   if points != none {
-    #grid(
+    grid(
       columns: (1fr, auto),
       title,
       text(size: 10pt, weight: "regular")[#points pts],
