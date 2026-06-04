@@ -192,11 +192,9 @@
 
 #question(space-below: 5em)[
   First question goes here.
-  #choices(arrangement: "grid",
-    [first choice. And in the end, the love you take is equal to the love you make. Her majesty's a pretty nice girl, but she doesn't have a lot to say.],
-    [second choice. also long, but not quite as long as you might think.],
-    [third choice],
-    [fourth choice],
+  #choices(arrangement: "linear",
+    [True],
+    [False],
   )
 ]
 

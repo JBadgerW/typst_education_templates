@@ -226,38 +226,63 @@
 
 // choices environment for multiple choice questions
 #let choices(arrangement: "vertical", ..items) = {
-  let labeled = items.pos().enumerate().map(((i, item)) => {
-    let label = numbering("A.", i + 1)
-    let indent = 1.5em  // adjust to match label + gap width
-    block(
-      width: 100%,
-      grid(
-        columns: (indent, 1fr),
-        column-gutter: 0pt,
-        align(top, label),
-        block(width: 100%, [#set par(hanging-indent: 0em); #item]),
-      )
-    )
-  })
+  let labeled = items.pos().enumerate().map(((i, item)) => (
+    numbering("A.", i + 1),
+    item,
+  ))
 
   if arrangement == "vertical" {
-    stack(dir: ttb, spacing: 0.75em, ..labeled)
+    // Original behavior: one choice per line
+    stack(
+      dir: ttb,
+      spacing: 1em,
+      ..labeled.map(((label, item)) => [
+        #grid(
+          columns: (auto, 1fr),
+          [#label #h(0.25em)],
+          [#item]
+        )
+      ])
+    )
+
   } else if arrangement == "linear" {
-    labeled.join(h(1.5em))
+    [
+      #parbreak()
+      // All choices on one line
+      #labeled.map(((label, item)) => [
+        #label #h(0.25em) #item #h(1fr)
+      ]).join()
+    ]
+
   } else if arrangement == "grid" {
+    // chunk into pairs, padding with empty if odd
     let pairs = range(0, labeled.len(), step: 2).map(i => {
       let a = labeled.at(i)
       let b = if i + 1 < labeled.len() { labeled.at(i + 1) } else { none }
       (a, b)
     })
+
     stack(
       dir: ttb,
       spacing: 1em,
       ..pairs.map(((a, b)) =>
         grid(
           columns: (1fr, 1fr),
-          a,
-          if b != none { b } else [],
+          gutter: 12pt,
+          [
+            #grid(
+              columns: (auto, 1fr),
+              [#a.at(0) #h(0.25em)],
+              [#a.at(1)],
+            ) 
+          ],
+          if b != none [
+            #grid(
+              columns: (auto, 1fr),
+              [#b.at(0) #h(0.25em)],
+              [#b.at(1)],
+            ) 
+          ] else [],
         )
       )
     )
