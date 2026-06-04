@@ -109,7 +109,6 @@
           [#label #h(0.25em)],
           [#item]
         )
-        //#label #h(0.25em) #item
       ])
     )
 
@@ -137,8 +136,20 @@
         grid(
           columns: (1fr, 1fr),
           gutter: 12pt,
-          [#a.at(0) #h(0.25em) #a.at(1)],
-          if b != none [#b.at(0) #h(0.25em) #b.at(1)] else [],
+          [
+            #grid(
+              columns: (auto, 1fr),
+              [#a.at(0) #h(0.25em)],
+              [#a.at(1)],
+            ) 
+          ],
+          if b != none [
+            #grid(
+              columns: (auto, 1fr),
+              [#b.at(0) #h(0.25em)],
+              [#b.at(1)],
+            ) 
+          ] else [],
         )
       )
     )
