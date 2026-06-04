@@ -31,7 +31,7 @@ the LaTeX exam class's question environment which gets confused by tables and st
 ```
 
 N.b. the number of points passed to the question environment/function is optional. If you don't want
-to both with that (and I usually don't), just make it 
+to bother with that (and I usually don't), just make it 
 
 ```
 #question()[How does Aristotle define 'virtue'?]
