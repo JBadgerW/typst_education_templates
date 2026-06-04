@@ -104,15 +104,23 @@
       dir: ttb,
       spacing: 1em,
       ..labeled.map(((label, item)) => [
-        #label #h(0.25em) #item
+        #grid(
+          columns: (auto, 1fr),
+          [#label #h(0.25em)],
+          [#item]
+        )
+        //#label #h(0.25em) #item
       ])
     )
 
   } else if arrangement == "linear" {
-    // All choices on one line
-    labeled.map(((label, item)) => [
-      #label #h(0.25em) #item #h(1.5em)
-    ]).join()
+    [
+      #parbreak()
+      // All choices on one line
+      #labeled.map(((label, item)) => [
+        #label #h(0.25em) #item #h(1fr)
+      ]).join()
+    ]
 
   } else if arrangement == "grid" {
     // chunk into pairs, padding with empty if odd
@@ -128,6 +136,7 @@
       ..pairs.map(((a, b)) =>
         grid(
           columns: (1fr, 1fr),
+          gutter: 12pt,
           [#a.at(0) #h(0.25em) #a.at(1)],
           if b != none [#b.at(0) #h(0.25em) #b.at(1)] else [],
         )
@@ -172,6 +181,12 @@
 
 #question(space-below: 5em)[
   First question goes here.
+  #choices(arrangement: "grid",
+    [first choice. And in the end, the love you take is equal to the love you make. Her majesty's a pretty nice girl, but she doesn't have a lot to say.],
+    [second choice. also long, but not quite as long as you might think.],
+    [third choice],
+    [fourth choice],
+  )
 ]
 
 
