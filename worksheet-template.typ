@@ -8,6 +8,8 @@
 
 #set text(
   font: "New Computer Modern",
+  // font: "Linux Libertine O",
+  // font: "Times New Roman",
   size: 12pt,
 )
 
@@ -35,19 +37,19 @@
 Factor completely: $display(x^2 + 7x + 12)$
 
 #choices(
-  //arrangement: "grid",
+  arrangement: "vertical",
   [$(x + 4)(x - 3)$],
   [$(x - 2)(x + 1)$],
   [$(x - 1)(x + 8)$],
-  [
-    When in the course of human events it becomes necessary
-    for one people to dissolve the political bands that have 
-    joined them to another and assume among the powers of the
-    earth that separate and equal station to which the laws of
-    Nature and Nature's God entitle them....
-  ],
-  //[Oh, why not have another?],
-  //[And another?]
+  // [
+  //   When in the course of human events it becomes necessary
+  //   for one people to dissolve the political bands that have 
+  //   joined them to another and assume among the powers of the
+  //   earth that separate and equal station to which the laws of
+  //   Nature and Nature's God entitle them....
+  // ],
+  // [Oh, why not have another?],
+  [And another?]
 )
 //#v(2.5cm)
 
