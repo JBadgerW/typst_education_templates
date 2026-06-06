@@ -14,9 +14,9 @@
 #let class-name    = "Physical Science"
 #let teacher-name  = "Mr. Jonathan Hart"
 #let exam-date     = "5 June 2025"
-#let school-motto  = "Scientia et Virtus"   // set to "" to suppress
+#let school-motto  = "Scientia et virtus"   // set to "" to suppress
 
-#let logo-size     = 144pt   // adjust to taste
+#let logo-size     = 100pt   // adjust to taste
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Paste everything below into your template file.
@@ -61,14 +61,14 @@
 // ── Logo ──────────────────────────────────────────────────────────────────────
 // Replace the SVG block below with:  #image("logo.png", width: logo-size)
 
-#v(120pt)
+#v(1fr)
 #align(center)[
   #image("Torch_Only-SQUARE_White_BG.png", width: logo-size)
 ]
 
 // ── Exam title block ──────────────────────────────────────────────────────────
 
-#v(28pt)
+#v(1fr)
 #align(center)[
   // Thin rule above
   #line(length: 45%, stroke: 1.2pt + accent)
@@ -96,7 +96,7 @@
 
 // ── Teacher / date metadata ───────────────────────────────────────────────────
 
-#v(28pt)
+#v(1fr)
 #align(center)[
   #grid(
     columns:      (auto, auto),
@@ -119,47 +119,50 @@
 
 // ── Student name field ────────────────────────────────────────────────────────
 
-#v(36pt)
-#block(
-  width:  82%,
-  fill:   box-bg,
-  stroke: (left: 4pt + accent),
-  radius: (right: 4pt),
-  inset:  (x: 16pt, y: 14pt),
-)[
-  #set text(size: 9pt, fill: luma(80), font: "Helvetica Neue", weight: "bold")
-  #upper[Student Name]
-  #v(10pt)
-  #line(length: 100%, stroke: 0.5pt + luma(160))
-  // #v(4pt)
-  // #upper[Student ID / Grade]
-  // #v(10pt)
-  // #line(length: 100%, stroke: 0.5pt + luma(160))
-]
+#v(1fr)
+// #align(center)[
+  #block(
+    // width:  95%,
+    width:  82%,
+    fill:   box-bg,
+    stroke: (left: 4pt + accent),
+    radius: (right: 4pt),
+    inset:  (x: 16pt, y: 14pt),
+  )[
+    #set text(size: 9pt, fill: luma(80), font: "Helvetica Neue", weight: "bold")
+    #align(left)[
+      #upper[Student Name]
+      #v(18pt)
+      #line(length: 100%, stroke: 0.5pt + luma(160))
+    ]
+  ]
+// ]
 
 // ── Instructions notice ───────────────────────────────────────────────────────
 
-#v(24pt)
-#block(
-  width: 82%,
-  inset: (x: 16pt, y: 0pt),
-)[
-  #set text(size: 9pt, fill: luma(100), style: "italic")
-  #align(center)[
-    // Write your full name on every page. \ 
-    Do not open this exam until instructed to do so.
-  ]
-]
+// #v(12pt)
+// #block(
+//   width: 82%,
+//   inset: (x: 16pt, y: 0pt),
+// )[
+//   #set text(size: 9pt, fill: luma(100), style: "italic")
+//   #align(center)[
+//     // Write your full name on every page. \ 
+//     // Do not open this exam until instructed to do so.
+//   ]
+// ]
 
 // ── Bottom decorative rule ────────────────────────────────────────────────────
 
-#v(1fr)   // push rule to the bottom of the page
+#v(36pt)   // push rule to the bottom of the page
 #align(center)[
-  #line(length: 80%, stroke: 0.8pt + rule-col)
-  #v(5pt)
-  #text(size: 8pt, fill: luma(150), font: "Helvetica Neue")[
-    #upper(school-name) · #exam-date
-  ]
+  #line(length: 67%, stroke: 0.8pt + rule-col)
+  // #v(5pt)
+  #set text(size: 9pt, fill: luma(100), style: "italic")
+    Do not open this exam until instructed to do so.
+  // #text(size: 8pt, fill: luma(150), font: "Helvetica Neue")[
+  //   #upper(school-name) · #exam-date
+  // ]
 ]
 
 // ── Page break into exam body ────────────────────────────────────────────────
