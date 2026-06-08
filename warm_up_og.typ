@@ -1,9 +1,9 @@
 // WORKSHEET BASIC INFORMATION
-#let ws-title         = [Solving one-step equations]
+#let ws-title         = [Evaluating algebraic expressions]
 #let ws-version       = [32]
 #let ws-instructions  = [Evaluate each expression.]
 
-#import "question-env.typ": question, qnum
+#import "question-env.typ": question
 
 #let worksheet-content = [
   #question(space-below: 1fr)[
@@ -53,7 +53,6 @@ margin: 1cm,
 #let name-date = [
   #grid(
     columns: (1fr, auto),
-    // stroke: 1pt + red,
     [
       Name #answer-blank(2in)
     ],
@@ -66,7 +65,6 @@ margin: 1cm,
 #let title-version = [
   #grid(
     columns: (1fr, auto),
-    // stroke: 1pt + blue,
     [
       #text(size: 16pt, weight: "bold")[
         #ws-title 
@@ -79,7 +77,7 @@ margin: 1cm,
 ]
 
 #let instructions = [
-  _ #ws-instructions _
+  #emph[#ws-instructions]
 ]
 
 #let worksheet-header = stack(
@@ -105,7 +103,6 @@ margin: 1cm,
 #grid(
   columns: (1fr, 1fr),
   gutter: 2cm,
-  // stroke: 1pt + red,
   [#worksheet-page()],
   [#worksheet-page()],
 )
