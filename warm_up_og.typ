@@ -1,4 +1,5 @@
 // WORKSHEET BASIC INFORMATION
+#let ws-class         = [Algebra 1]
 #let ws-title         = [Evaluating algebraic expressions]
 #let ws-version       = [32]
 #let ws-instructions  = [Evaluate each expression.]
