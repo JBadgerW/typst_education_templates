@@ -2,7 +2,7 @@
 #let ws-class         = [Algebra 1]
 #let ws-title         = [Evaluating algebraic expressions]
 #let ws-version       = [32]
-#let ws-instructions  = [Evaluate each expression.]
+#let ws-instructions  = [Evaluate each expression and circle your answer.]
 
 #import "question-env.typ": question
 
@@ -33,6 +33,12 @@
 
 ]
 
+#let answers-content = [
+  #question()[5]
+  #question()[10]
+  #question()[15]
+  #question()[20]
+]
 
 #set page(
 paper: "us-letter",
@@ -59,6 +65,36 @@ margin: 1cm,
     ],
     [
       Date #answer-blank(1in) 
+    ],
+  )
+]
+
+// -- Possible different header configuration
+// I don't know what it is, but I don't like this configuration for these half-
+// page worksheets. I think everything just feels too crowded. The advantage is
+// that you get the name of the class at the top, but I'm just not sure.
+#let class-name = [
+  #grid(
+    columns: (1fr, auto),
+    [
+      #ws-class
+    ],
+    [
+      Name #answer-blank(2in)
+    ],
+  )
+]
+
+#let title-date-version = [
+  #grid(
+    columns: (1fr, auto, auto),
+    [
+      #text(size: 14pt, weight: "bold")[
+        #ws-title 
+      ]
+    ],
+    [
+      Date #answer-blank(1in)
     ],
   )
 ]
@@ -91,6 +127,18 @@ margin: 1cm,
   )
 )
 
+// This is the pseudo-Kuta style header that I don't really like for the half
+// page worksheets.
+// #let worksheet-header = stack(
+//   spacing: 0.5cm,
+//   class-name,
+//   stack(
+//     spacing: 0.3cm,
+//     title-date-version,
+//     instructions,
+//   )
+// )
+
 #let worksheet-page() = [
   #counter("question").update(0)
 
@@ -101,6 +149,10 @@ margin: 1cm,
   )
 ]
 
+// #let answers-heading = [
+//   #heading()[#]
+// ]
+
 #grid(
   columns: (1fr, 1fr),
   gutter: 2cm,
@@ -108,3 +160,10 @@ margin: 1cm,
   [#worksheet-page()],
 )
 
+// #pagebreak()
+//
+// #grid(
+//   columns: (1fr, 1fr),
+//   gutter: 2cm,
+//   [#answer-block]
+// )
