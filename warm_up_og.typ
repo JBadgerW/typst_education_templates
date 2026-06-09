@@ -69,6 +69,19 @@ margin: 1cm,
   )
 ]
 
+
+#let title-version = [
+  #grid(
+    columns: (1fr, auto),
+    heading(level: 1)[#ws-title],
+    [Ver. #ws-version],
+  )
+]
+
+#let instructions = [
+  #emph[#ws-instructions]
+]
+
 // -- Possible different header configuration
 // I don't know what it is, but I don't like this configuration for these half-
 // page worksheets. I think everything just feels too crowded. The advantage is
@@ -99,36 +112,6 @@ margin: 1cm,
   )
 ]
 
-#let title-version = [
-  #grid(
-    columns: (1fr, auto),
-    [
-      #text(size: 16pt, weight: "bold")[
-        #ws-title 
-      ]
-    ],
-    [
-      Ver. #ws-version
-    ],
-  )
-]
-
-#let instructions = [
-  #emph[#ws-instructions]
-]
-
-#let worksheet-header = stack(
-  spacing: 0.3cm,
-  name-date,
-  stack(
-    spacing: 0.3cm,
-    title-version,
-    instructions,
-  )
-)
-
-// This is the pseudo-Kuta style header that I don't really like for the half
-// page worksheets.
 // #let worksheet-header = stack(
 //   spacing: 0.5cm,
 //   class-name,
@@ -138,6 +121,18 @@ margin: 1cm,
 //     instructions,
 //   )
 // )
+
+// -- END OF DIFFERENT HEADER CONFIGURATION
+
+#let worksheet-header = stack(
+  spacing: 0.3cm,
+  name-date,
+  stack(
+    spacing: 0.4cm,
+    title-version,
+    instructions,
+  )
+)
 
 #let worksheet-page() = [
   #counter("question").update(0)
@@ -149,8 +144,20 @@ margin: 1cm,
   )
 ]
 
+#let answer-page() = [
+  #counter("question").update(0)
+
+  #stack(
+    spacing: 0.7cm,
+    heading(level: 1)[#ws-title],
+    title-version, 
+  )
+]
+
 // #let answers-heading = [
-//   #heading()[#]
+//   #grid(
+//     [#text()]
+//   )
 // ]
 
 #grid(
@@ -160,10 +167,11 @@ margin: 1cm,
   [#worksheet-page()],
 )
 
-// #pagebreak()
-//
-// #grid(
-//   columns: (1fr, 1fr),
-//   gutter: 2cm,
-//   [#answer-block]
-// )
+#pagebreak()
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 2cm,
+  [#answer-page()],
+  [#answer-page()],
+)
