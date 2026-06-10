@@ -16,7 +16,8 @@
 // ── Colour / font setup ───────────────────────────────────────────────────────
 
 #let accent    = rgb("#092532")
-#let sec-col   = rgb("#2e7d52")
+// #let sec-col   = rgb("#2e7d52")
+#let sec-col   = rgb("#d4a37c")
 #let box-bg    = rgb("#eef4fb")
 #let rule-col  = luma(180)
 
