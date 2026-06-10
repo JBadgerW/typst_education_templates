@@ -1,5 +1,6 @@
 *.pdf
 *.png
+*.zip
 Torch_Only-SQUARE_White_BG.png
 
 !examples/*.pdf
