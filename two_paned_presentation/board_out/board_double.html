@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Problems</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  #board {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .pane {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+
+  .pane:first-child {
+    border-right: 2px solid #000;
+  }
+
+  .pane img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  .done {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    color: #000;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="board">
+  <div class="pane" id="pane-0"></div>
+  <div class="pane" id="pane-1"></div>
+</div>
+
+<script>
+const problems = [
+  { q: "p00_q.png", a: "p00_a.png" },
+  { q: "p01_q.png", a: "p01_a.png" },
+  { q: "p02_q.png", a: "p02_a.png" },
+  { q: "p03_q.png", a: "p03_a.png" },
+  { q: "p04_q.png", a: "p04_a.png" },
+  { q: "p05_q.png", a: "p05_a.png" },
+];
+
+// Shared queue pointer — next problem index available to be claimed
+let nextIndex = 2;
+
+// Per-pane state: { problemIndex, showingAnswer }
+// Each pane starts with its own problem claimed from the front of the queue
+const paneState = [
+  { problemIndex: 0, showingAnswer: false },
+  { problemIndex: 1, showingAnswer: false },
+];
+
+function render(paneId) {
+  const el = document.getElementById('pane-' + paneId);
+  const state = paneState[paneId];
+
+  if (state.problemIndex >= problems.length) {
+    el.innerHTML = '<span class="done">Done</span>';
+    return;
+  }
+
+  const prob = problems[state.problemIndex];
+  const src = state.showingAnswer ? prob.a : prob.q;
+
+  // Reuse existing img element if possible to avoid flicker
+  let img = el.querySelector('img');
+  if (!img) {
+    img = document.createElement('img');
+    el.innerHTML = '';
+    el.appendChild(img);
+  }
+  img.src = src;
+  img.alt = state.showingAnswer ? 'Answer' : 'Question';
+}
+
+function handleClick(paneId) {
+  const state = paneState[paneId];
+
+  // If already done, do nothing
+  if (state.problemIndex >= problems.length) return;
+
+  if (!state.showingAnswer) {
+    // Question → Answer
+    state.showingAnswer = true;
+  } else {
+    // Answer → claim next problem from shared queue
+    if (nextIndex < problems.length) {
+      state.problemIndex = nextIndex;
+      nextIndex++;
+    } else {
+      state.problemIndex = problems.length; // mark done
+    }
+    state.showingAnswer = false;
+  }
+
+  render(paneId);
+}
+
+// Wire up clicks
+document.getElementById('pane-0').addEventListener('click', () => handleClick(0));
+document.getElementById('pane-1').addEventListener('click', () => handleClick(1));
+
+// Keyboard: left arrow / A key → pane 0; right arrow / L key → pane 1
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') handleClick(0);
+  if (e.key === 'ArrowRight' || e.key === 'l' || e.key === 'L') handleClick(1);
+});
+
+// Initial render
+render(0);
+render(1);
+</script>
+</body>
+</html>

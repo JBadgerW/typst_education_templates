@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Problems</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  #pane {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  #pane img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  .done {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    color: #000;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="pane"></div>
+
+<script>
+const problems = [
+  { q: "p00_q.png", a: "p00_a.png" },
+  { q: "p01_q.png", a: "p01_a.png" },
+  { q: "p02_q.png", a: "p02_a.png" },
+  { q: "p03_q.png", a: "p03_a.png" },
+  { q: "p04_q.png", a: "p04_a.png" },
+  { q: "p05_q.png", a: "p05_a.png" },
+];
+
+let index = 0;
+let showingAnswer = false;
+
+function render() {
+  const el = document.getElementById('pane');
+
+  if (index >= problems.length) {
+    el.innerHTML = '<span class="done">Done</span>';
+    return;
+  }
+
+  const src = showingAnswer ? problems[index].a : problems[index].q;
+
+  let img = el.querySelector('img');
+  if (!img) {
+    img = document.createElement('img');
+    el.innerHTML = '';
+    el.appendChild(img);
+  }
+  img.src = src;
+  img.alt = showingAnswer ? 'Answer' : 'Question';
+}
+
+function handleClick() {
+  if (index >= problems.length) return;
+
+  if (!showingAnswer) {
+    showingAnswer = true;
+  } else {
+    index++;
+    showingAnswer = false;
+  }
+
+  render();
+}
+
+document.getElementById('pane').addEventListener('click', handleClick);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' ||
+      e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    handleClick();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
