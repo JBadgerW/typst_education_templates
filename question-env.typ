@@ -144,7 +144,25 @@
 // width: some_length).
 #let fillin(
   width: 1.75in,
+  answers: false,
   body
 ) = {
-  answer-blank(width)
+  if answers {
+    context {
+      let text-width = measure(body).width
+      let final-width = calc.max(width, text-width)
+
+      box(
+        width: final-width,
+        grid(
+          columns: 1,
+          rows: (auto, auto),
+          align(center, body),
+          line(stroke: 0.7pt, length: 100%),
+        ),
+      )
+}
+  } else {
+    answer-blank(width)
+  }
 }
