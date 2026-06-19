@@ -14,7 +14,8 @@
 #let qnum = counter("question")
 
 // Question environment
-#let question(points: none, 
+#let question(
+  points: none, 
   space-below: 2em, 
   answer-line: none,
   renum: none,
