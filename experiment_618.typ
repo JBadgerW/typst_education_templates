@@ -1,5 +1,5 @@
 #import "worksheet-headers.typ": first-page-header
-#import "question-env.typ": question, parts, choices, fillin
+#import "question-env.typ": question, parts, choices, fillin, answer-blank
 
 #set page(
   paper: "us-letter",
@@ -132,7 +132,7 @@ Evaluate:
 
 ]
 
-#question()[When in the course of #fillin(width: 0.25in, answers: true)[human] events, it becomes...
+#question()[When in the course of #fillin(answers: false)[human] events, it becomes...
   #choices(
     arrangement: "linear",
     [philosophical],
@@ -141,3 +141,78 @@ Evaluate:
     [earthly],
   )
 ]
+
+
+== Matching Lists
+
+#emph()[Match each definition on the left with its term on the right.]
+
+#v(1em)
+
+#grid(
+  columns: (1fr, 1fr),
+  gutter: 2em,
+  [
+    #question(answer-line: 1.25cm)[Capital of Assyria]
+  
+    #question(answer-line: 1.25cm)[Inventors of the airplane]
+
+    #question(answer-line: 1.25cm)[Longest river in the world.]
+
+    #question(answer-line: 1.25cm)[First Roman emperor]
+
+    #question(answer-line: 1.25cm)[Speed of light]
+  ],
+  [
+    #enum(
+    tight: false,
+    numbering: "A.",
+      [_c_],
+
+      [Nile],
+
+      [Caesar Augustus],
+
+      [Nineveh],
+
+      [Wright Brothers],
+
+    )
+  ]
+)
+
+== Write in with Word bank
+
+#emph()[Write the correct answer on the line given. Use the given word bank.]
+
+#v(1em)
+
+#grid(
+  columns: (1fr, 1fr, 1fr),
+  [
+    _c_
+
+    Caesar Augustus
+
+  ],
+  [
+    Nile
+    
+    Nineveh
+  ],
+  [
+    Wright Brothers
+  ],
+)
+
+#v(1em)
+
+#question(answer-line: 3in)[Capital of Assyria]
+
+#question(answer-line: 3in)[Inventors of the airplane]
+
+#question(answer-line: 3in)[Longest river in the world]
+
+#question(answer-line: 3in)[First Roman emperor]
+
+#question(answer-line: 3in)[Speed of light]
