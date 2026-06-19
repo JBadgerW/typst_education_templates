@@ -138,4 +138,13 @@
 // Point value label (right-aligned, used inline beside questions)
 #let pts(n) = h(1fr) + text(size: 9pt, fill: luma(100))[_(#n pt#if n != 1 [s])_]
 
-
+// Beginning of a fill-in-the-blank. I expect to make it at some point part of
+// the answers. Right now it just removes the word passed as the body and inserts
+// a blank line 1.75in wide (the default, though you can change it by passing in 
+// width: some_length).
+#let fillin(
+  width: 1.75in,
+  body
+) = {
+  answer-blank(width)
+}
