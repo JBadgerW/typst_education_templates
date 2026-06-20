@@ -1,6 +1,11 @@
 #set page(
   paper: "us-letter",
-  margin: 0.5in
+  margin: (
+    top: 0.5in,
+    left: 0.5in,
+    right: 0.5in,
+    bottom: 0.85in, //  Why on earth does 0.85in = 0.5in? 
+  ) 
 )
 
 #set text(
@@ -39,6 +44,7 @@
 
 #table(
   columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
+  rows: (auto, 1fr),
   column-gutter: 0pt,
   inset: (top: 5pt, right: 10pt, left:10pt, bottom: 5pt),
   table.cell(
@@ -152,14 +158,14 @@
   multiplication(9, 12, []), // , 108),
   multiplication(8, 10, []), // , 80),
   multiplication(1, 5, []), // , 5),
-  multiplication(6, 10, []), // , 60),
-  multiplication(3, 6, []), // , 18),
-  multiplication(4, 10, []), // , 40),
-  multiplication(12, 2, []), // , 24),
-  multiplication(7, 1, []), // , 7),
-  multiplication(6, 11, []), // , 66),
-  multiplication(10, 9, []), // , 90),
-  multiplication(3, 6, []), // , 18),
-  multiplication(8, 5, []), // , 40),
-  multiplication(12, 10, []), // , 120),
+  // multiplication(6, 10, []), // , 60),
+  // multiplication(3, 6, []), // , 18),
+  // multiplication(4, 10, []), // , 40),
+  // multiplication(12, 2, []), // , 24),
+  // multiplication(7, 1, []), // , 7),
+  // multiplication(6, 11, []), // , 66),
+  // multiplication(10, 9, []), // , 90),
+  // multiplication(3, 6, []), // , 18),
+  // multiplication(8, 5, []), // , 40),
+  // multiplication(12, 10, []), // , 120),
 )
