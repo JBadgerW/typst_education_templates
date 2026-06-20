@@ -4,9 +4,9 @@
 )
 
 #set text(
-  font: "New Computer Modern",
-  // font: "Helvetica Neue",
-  size: 11pt,
+  // font: "New Computer Modern",
+  font: "Helvetica Neue",
+  size: 12pt,
 )
 
 
@@ -16,6 +16,18 @@
   stroke: (bottom: 0.7pt),
 )
 
+#let multiplication(a, b, product) = table(
+  columns: (auto, auto),
+  align: (right, right),
+  stroke: none,
+
+  [], [#a],
+  [$times$], [#b],
+
+  table.hline(),
+
+  [], [#product],
+)
 
 // Name and Date header
 #grid(
@@ -25,8 +37,129 @@
   align(right)[Date #answer-blank(3.5cm)],
 )
 
-#grid(
+#table(
   columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
   column-gutter: 0pt,
-  []
+  inset: (top: 5pt, right: 10pt, left:10pt, bottom: 5pt),
+  table.cell(
+    inset: 4pt, 
+    fill: black, 
+    text(size: 11pt, fill: white, weight: "bold")[90 Facts]
+  ),
+  table.cell(
+    stroke: (
+      right: none,
+      top: none,
+    ),
+    colspan: 7
+  )[Multiply up to 12],
+  table.cell(
+    stroke: (
+      left: none,
+      right: none,
+      top: none,
+    ),
+    colspan: 2, 
+    align: right,
+  )[#text(size: 8pt)[Seed: 28056]],
+  multiplication(12, 6, []), // , 72),
+  multiplication(4, 1, []), // , 4),
+  multiplication(5, 6, []), // , 30),
+  multiplication(8, 10, []), // , 80),
+  multiplication(3, 7, []), // , 21),
+  multiplication(11, 3, []), // , 33),
+  multiplication(11, 2, []), // , 22),
+  multiplication(10, 4, []), // , 40),
+  multiplication(1, 2, []), // , 2),
+  multiplication(5, 10, []), // , 50),
+  multiplication(11, 2, []), // , 22),
+  multiplication(11, 7, []), // , 77),
+  multiplication(1, 3, []), // , 3),
+  multiplication(8, 3, []), // , 24),
+  multiplication(3, 9, []), // , 27),
+  multiplication(8, 4, []), // , 32),
+  multiplication(2, 12, []), // , 24),
+  multiplication(5, 5, []), // , 25),
+  multiplication(3, 12, []), // , 36),
+  multiplication(10, 2, []), // , 20),
+  multiplication(4, 6, []), // , 24),
+  multiplication(8, 4, []), // , 32),
+  multiplication(12, 1, []), // , 12),
+  multiplication(12, 3, []), // , 36),
+  multiplication(11, 7, []), // , 77),
+  multiplication(4, 4, []), // , 16),
+  multiplication(11, 12, []), // , 132),
+  multiplication(5, 2, []), // , 10),
+  multiplication(7, 3, []), // , 21),
+  multiplication(4, 12, []), // , 48),
+  multiplication(2, 2, []), // , 4),
+  multiplication(3, 4, []), // , 12),
+  multiplication(9, 10, []), // , 90),
+  multiplication(4, 2, []), // , 8),
+  multiplication(4, 10, []), // , 40),
+  multiplication(4, 4, []), // , 16),
+  multiplication(2, 5, []), // , 10),
+  multiplication(7, 9, []), // , 63),
+  multiplication(11, 6, []), // , 66),
+  multiplication(12, 1, []), // , 12),
+  multiplication(11, 5, []), // , 55),
+  multiplication(1, 10, []), // , 10),
+  multiplication(4, 6, []), // , 24),
+  multiplication(9, 2, []), // , 18),
+  multiplication(2, 5, []), // , 10),
+  multiplication(4, 4, []), // , 16),
+  multiplication(11, 2, []), // , 22),
+  multiplication(10, 2, []), // , 20),
+  multiplication(2, 3, []), // , 6),
+  multiplication(9, 11, []), // , 99),
+  multiplication(5, 6, []), // , 30),
+  multiplication(11, 6, []), // , 66),
+  multiplication(8, 10, []), // , 80),
+  multiplication(7, 2, []), // , 14),
+  multiplication(2, 7, []), // , 14),
+  multiplication(2, 11, []), // , 22),
+  multiplication(2, 5, []), // , 10),
+  multiplication(8, 9, []), // , 72),
+  multiplication(9, 7, []), // , 63),
+  multiplication(5, 5, []), // , 25),
+  multiplication(6, 9, []), // , 54),
+  multiplication(6, 10, []), // , 60),
+  multiplication(5, 4, []), // , 20),
+  multiplication(5, 4, []), // , 20),
+  multiplication(8, 7, []), // , 56),
+  multiplication(3, 5, []), // , 15),
+  multiplication(12, 11, []), // , 132),
+  multiplication(4, 7, []), // , 28),
+  multiplication(5, 2, []), // , 10),
+  multiplication(5, 9, []), // , 45),
+  multiplication(2, 12, []), // , 24),
+  multiplication(6, 10, []), // , 60),
+  multiplication(3, 6, []), // , 18),
+  multiplication(4, 10, []), // , 40),
+  multiplication(12, 2, []), // , 24),
+  multiplication(7, 1, []), // , 7),
+  multiplication(6, 11, []), // , 66),
+  multiplication(10, 9, []), // , 90),
+  multiplication(3, 6, []), // , 18),
+  multiplication(8, 5, []), // , 40),
+  multiplication(12, 10, []), // , 120),
+  multiplication(6, 3, []), // , 18),
+  multiplication(7, 4, []), // , 28),
+  multiplication(11, 10, []), // , 110),
+  multiplication(9, 7, []), // , 63),
+  multiplication(6, 12, []), // , 72),
+  multiplication(1, 7, []), // , 7),
+  multiplication(9, 12, []), // , 108),
+  multiplication(8, 10, []), // , 80),
+  multiplication(1, 5, []), // , 5),
+  multiplication(6, 10, []), // , 60),
+  multiplication(3, 6, []), // , 18),
+  multiplication(4, 10, []), // , 40),
+  multiplication(12, 2, []), // , 24),
+  multiplication(7, 1, []), // , 7),
+  multiplication(6, 11, []), // , 66),
+  multiplication(10, 9, []), // , 90),
+  multiplication(3, 6, []), // , 18),
+  multiplication(8, 5, []), // , 40),
+  multiplication(12, 10, []), // , 120),
 )
