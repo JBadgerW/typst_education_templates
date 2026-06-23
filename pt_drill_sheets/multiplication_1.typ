@@ -1,3 +1,12 @@
+#import "@preview/suiji:0.5.1": *
+#import sys: inputs
+
+#let seed = int(sys.inputs.at("seed", default: "28056"))
+
+#let rng = gen-rng(
+  seed
+)
+
 #set page(
   paper: "us-letter",
   margin: (
@@ -34,6 +43,20 @@
   [], if answer { [#product] } else { [] },
 )
 
+#let problems = (
+  ..for a in range(1, 13) {
+    for b in range(1, 13) {
+      ((a, b),)
+    }
+  },
+)
+
+#let shuffled-state = shuffle(rng, problems)
+
+#let worksheet-problems = shuffled-state.at(1).slice(0, 90) 
+
+// BEGINNING OF DOCUMENT CONTENT
+//
 // Name and Date header
 #grid(
   columns: (1fr, auto),
@@ -47,11 +70,13 @@
   rows: (auto, 1fr),
   column-gutter: 0pt,
   inset: (top: 7pt, right: 10pt, left:10pt, bottom: 5pt),
+
   table.cell(
     inset: 4pt, 
     fill: black, 
     text(size: 11pt, fill: white, weight: "bold")[90 Facts]
   ),
+
   table.cell(
     stroke: (
       right: none,
@@ -59,6 +84,7 @@
     ),
     colspan: 7
   )[Multiply up to 12],
+
   table.cell(
     stroke: (
       left: none,
@@ -67,105 +93,57 @@
     ),
     colspan: 2, 
     align: right,
-  )[#text(size: 8pt)[Seed: 28056]],
-  multiplication(12, 6, 72, answer: false),
-  multiplication(4, 1, 4, answer: false),
-  multiplication(5, 6, 30, answer: false),
-  multiplication(8, 10, 80, answer: false),
-  multiplication(3, 7, 21, answer: false),
-  multiplication(11, 3, 33, answer: false),
-  multiplication(11, 2, 22, answer: false),
-  multiplication(10, 4, 40, answer: false),
-  multiplication(1, 2, 2, answer: false),
-  multiplication(5, 10, 50, answer: false),
-  multiplication(11, 2, 22, answer: false),
-  multiplication(11, 7, 77, answer: false),
-  multiplication(1, 3, 3, answer: false),
-  multiplication(8, 3, 24, answer: false),
-  multiplication(3, 9, 27, answer: false),
-  multiplication(8, 4, 32, answer: false),
-  multiplication(2, 12, 24, answer: false),
-  multiplication(5, 5, 25, answer: false),
-  multiplication(3, 12, 36, answer: false),
-  multiplication(10, 2, 20, answer: false),
-  multiplication(4, 6, 24, answer: false),
-  multiplication(8, 4, 32, answer: false),
-  multiplication(12, 1, 12, answer: false),
-  multiplication(12, 3, 36, answer: false),
-  multiplication(11, 7, 77, answer: false),
-  multiplication(4, 4, 16, answer: false),
-  multiplication(11, 12, 132, answer: false),
-  multiplication(5, 2, 10, answer: false),
-  multiplication(7, 3, 21, answer: false),
-  multiplication(4, 12, 48, answer: false),
-  multiplication(2, 2, 4, answer: false),
-  multiplication(3, 4, 12, answer: false),
-  multiplication(9, 10, 90, answer: false),
-  multiplication(4, 2, 8, answer: false),
-  multiplication(4, 10, 40, answer: false),
-  multiplication(4, 4, 16, answer: false),
-  multiplication(2, 5, 10, answer: false),
-  multiplication(7, 9, 63, answer: false),
-  multiplication(11, 6, 66, answer: false),
-  multiplication(12, 1, 12, answer: false),
-  multiplication(11, 5, 55, answer: false),
-  multiplication(1, 10, 10, answer: false),
-  multiplication(4, 6, 24, answer: false),
-  multiplication(9, 2, 18, answer: false),
-  multiplication(2, 5, 10, answer: false),
-  multiplication(4, 4, 16, answer: false),
-  multiplication(11, 2, 22, answer: false),
-  multiplication(10, 2, 20, answer: false),
-  multiplication(2, 3, 6, answer: false),
-  multiplication(9, 11, 99, answer: false),
-  multiplication(5, 6, 30, answer: false),
-  multiplication(11, 6, 66, answer: false),
-  multiplication(8, 10, 80, answer: false),
-  multiplication(7, 2, 14, answer: false),
-  multiplication(2, 7, 14, answer: false),
-  multiplication(2, 11, 22, answer: false),
-  multiplication(2, 5, 10, answer: false),
-  multiplication(8, 9, 72, answer: false),
-  multiplication(9, 7, 63, answer: false),
-  multiplication(5, 5, 25, answer: false),
-  multiplication(6, 9, 54, answer: false),
-  multiplication(6, 10, 60, answer: false),
-  multiplication(5, 4, 20, answer: false),
-  multiplication(5, 4, 20, answer: false),
-  multiplication(8, 7, 56, answer: false),
-  multiplication(3, 5, 15, answer: false),
-  multiplication(12, 11, 132, answer: false),
-  multiplication(4, 7, 28, answer: false),
-  multiplication(5, 2, 10, answer: false),
-  multiplication(5, 9, 45, answer: false),
-  multiplication(2, 12, 24, answer: false),
-  multiplication(6, 10, 60, answer: false),
-  multiplication(3, 6, 18, answer: false),
-  multiplication(4, 10, 40, answer: false),
-  multiplication(12, 2, 24, answer: false),
-  multiplication(7, 1, 7, answer: false),
-  multiplication(6, 11, 66, answer: false),
-  multiplication(10, 9, 90, answer: false),
-  multiplication(3, 6, 18, answer: false),
-  multiplication(8, 5, 40, answer: false),
-  multiplication(12, 10, 120, answer: false),
-  multiplication(6, 3, 18, answer: false),
-  multiplication(7, 4, 28, answer: false),
-  multiplication(11, 10, 110, answer: false),
-  multiplication(9, 7, 63, answer: false),
-  multiplication(6, 12, 72, answer: false),
-  multiplication(1, 7, 7, answer: false),
-  multiplication(9, 12, 108, answer: false),
-  multiplication(8, 10, 80, answer: false),
-  multiplication(1, 5, 5, answer: false),
-  // multiplication(6, 10, 60, answer: false),
-  // multiplication(3, 6, 18, answer: false),
-  // multiplication(4, 10, 40, answer: false),
-  // multiplication(12, 2, 24, answer: false),
-  // multiplication(7, 1, 7, answer: false),
-  // multiplication(6, 11, 66, answer: false),
-  // multiplication(10, 9, 90, answer: false),
-  // multiplication(3, 6, 18, answer: false),
-  // multiplication(8, 5, 40, answer: false),
-  // multiplication(12, 10, 120, answer: false),
+  )[#text(size: 8pt)[Seed: #seed]],
+
+  ..for (a, b) in worksheet-problems {
+    (
+      table.cell[
+        #multiplication(a, b, (a*b), answer: false)
+      ],
+    )
+  }
 )
+
+#pagebreak()
+
+= Answers
+
+#table(
+  columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
+  rows: (auto, 1fr),
+  column-gutter: 0pt,
+  inset: (top: 7pt, right: 10pt, left:10pt, bottom: 5pt),
+
+  table.cell(
+    inset: 4pt, 
+    fill: black, 
+    text(size: 11pt, fill: white, weight: "bold")[90 Facts]
+  ),
+
+  table.cell(
+    stroke: (
+      right: none,
+      top: none,
+    ),
+    colspan: 7
+  )[Multiply up to 12],
+
+  table.cell(
+    stroke: (
+      left: none,
+      right: none,
+      top: none,
+    ),
+    colspan: 2, 
+    align: right,
+  )[#text(size: 8pt)[Seed: #seed]],
+
+  ..for (a, b) in worksheet-problems {
+    (
+      table.cell[
+        #multiplication(a, b, (a*b), answer: true)
+      ],
+    )
+  }
+)
+
