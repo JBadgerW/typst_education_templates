@@ -43,18 +43,26 @@
   [], if answer { [#product] } else { [] },
 )
 
-#let division(dividend, divisor, quotient, answer: false) = table(
-  columns: (auto, auto),
-  align: (right, right),
-  stroke: none,
-  inset: 2pt,
-
-  [], if answer { [#quotient] } else { [] },
-  [#divisor], 
-  table.cell(
-    stroke: (left: 1pt, top: 1pt),
-  )[#dividend]
-)
+#let division(dividend, divisor, quotient, answer: false) = {
+  table(
+    columns: (auto, auto),
+    stroke: none,
+    inset: 0.08em,
+    align: right + top,
+    [],
+    [#if answer { [#quotient] } else { [] }],
+    table.cell(inset: (top: 0.2em))[#divisor],
+    [
+      #grid(
+        columns: (auto, auto),
+        stroke: (top: 0.06em),
+        inset: (top: 0.05em),
+        [)],//[#h(-0.03em))],
+        grid.cell(inset: (top: 0.12em))[#dividend]
+      )
+    ]
+  )
+}
 
 #let problems = (
   ..for a in range(1, 13) {
@@ -82,11 +90,13 @@
   columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
   rows: (auto, 1fr),
   column-gutter: 0pt,
-  inset: (top: 7pt, right: 4pt, left:4pt, bottom: 5pt),
+  inset: (bottom: 30pt),
+  align: center + bottom,
 
   table.cell(
     inset: 4pt, 
     fill: black, 
+    align: center + horizon,
     text(size: 11pt, fill: white, weight: "bold")[90 Facts]
   ),
 
@@ -95,8 +105,10 @@
       right: none,
       top: none,
     ),
-    colspan: 7
-  )[Multiply up to 12],
+    colspan: 7,
+    align: left + horizon,
+    inset: (bottom: 5pt),
+  )[Divide up to 144 by 12],
 
   table.cell(
     stroke: (
@@ -105,7 +117,8 @@
       top: none,
     ),
     colspan: 2, 
-    align: right,
+    align: right + horizon,
+    inset: (bottom: 5pt),
   )[#text(size: 8pt)[Seed: #seed]],
 
   ..for (a, b) in worksheet-problems {
@@ -125,11 +138,14 @@
   columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
   rows: (auto, 1fr),
   column-gutter: 0pt,
-  inset: (top: 7pt, right: 10pt, left:10pt, bottom: 5pt),
+  inset: (bottom: 30pt),
+  align: center + bottom,
+
 
   table.cell(
     inset: 4pt, 
     fill: black, 
+    align: center + horizon,
     text(size: 11pt, fill: white, weight: "bold")[90 Facts]
   ),
 
@@ -138,8 +154,10 @@
       right: none,
       top: none,
     ),
-    colspan: 7
-  )[Multiply up to 12],
+    colspan: 7,
+    align: left + horizon,
+    inset: (bottom: 5pt),
+  )[Divide up to 144 by 12],
 
   table.cell(
     stroke: (
@@ -148,7 +166,8 @@
       top: none,
     ),
     colspan: 2, 
-    align: right,
+    align: right + horizon,
+    inset: (bottom: 5pt),
   )[#text(size: 8pt)[Seed: #seed]],
 
   ..for (a, b) in worksheet-problems {
