@@ -1,7 +1,8 @@
 *.pdf
 *.png
 *.zip
-/pt_drill_sheets/__pychache__/
+*.pyc
+pt_drill_sheets/__pycache__/
 
 Torch_Only-SQUARE_White_BG.png
 
