@@ -1,6 +1,7 @@
-import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+
+import typst
 
 from drill_common import BASE_DIR, OPERATIONS, family_slug, generate_sheet, resolve_seed
 
@@ -133,14 +134,8 @@ class DrillSheetApp(ttk.Frame):
                 output_dir=output_dir,
                 **op,
             )
-        except FileNotFoundError:
-            messagebox.showerror(
-                "Typst not found",
-                "Could not find the 'typst' command. Make sure it is installed and on your PATH.",
-            )
-            return
-        except subprocess.CalledProcessError:
-            messagebox.showerror("Compile failed", "Typst failed to compile the worksheet.")
+        except typst.TypstError as exc:
+            messagebox.showerror("Compile failed", f"Typst failed to compile the worksheet:\n{exc}")
             return
 
         self.last_save_dir = saved_path.parent

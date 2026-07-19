@@ -1,8 +1,9 @@
 import argparse
 import json
 import random
-import subprocess
 from pathlib import Path
+
+import typst
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -86,26 +87,13 @@ def generate_sheet(
     else:
         output_path = Path(output_path)
 
-    data_path = BASE_DIR / f"data_{seed}.json"
-    with open(data_path, "w") as f:
-        json.dump(data, f)
-
-    try:
-        subprocess.run(
-            [
-                "typst",
-                "compile",
-                "--font-path",
-                str(BASE_DIR / "fonts"),
-                str(BASE_DIR / typst_file),
-                "--input",
-                f"data={data_path.name}",
-                str(output_path),
-            ],
-            check=True,
-        )
-    finally:
-        data_path.unlink()
+    typst.compile(
+        str(BASE_DIR / typst_file),
+        output=str(output_path),
+        font_paths=[str(BASE_DIR / "fonts")],
+        ignore_system_fonts=True,
+        sys_inputs={"data": json.dumps(data)},
+    )
 
     return seed, output_path
 

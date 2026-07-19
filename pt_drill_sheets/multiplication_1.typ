@@ -1,6 +1,6 @@
 #import sys: inputs
 
-#let data = json(sys.inputs.at("data"))
+#let data = json(bytes(sys.inputs.at("data")))
 #let seed = data.seed
 #let title = data.title
 #let subtitle = data.subtitle
