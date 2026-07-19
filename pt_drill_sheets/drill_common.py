@@ -52,6 +52,10 @@ def build_arg_parser(description):
     return parser
 
 
+def resolve_seed(seed):
+    return seed if seed is not None else random.randint(100_000, 999_999)
+
+
 def generate_sheet(
     families,
     max_factor,
@@ -63,7 +67,7 @@ def generate_sheet(
     output_path=None,
     output_dir=None,
 ):
-    seed = seed if seed is not None else random.randint(100_000, 999_999)
+    seed = resolve_seed(seed)
     rng = random.Random(seed)
 
     problems = generate_problems(families, max_factor=max_factor, count=count, rng=rng)

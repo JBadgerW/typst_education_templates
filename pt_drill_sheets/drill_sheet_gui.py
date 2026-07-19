@@ -2,7 +2,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-from drill_common import BASE_DIR, OPERATIONS, family_slug, generate_sheet
+from drill_common import BASE_DIR, OPERATIONS, family_slug, generate_sheet, resolve_seed
 
 MAX_FACTOR = 12
 DEFAULT_COUNT = 90
@@ -110,15 +110,16 @@ class DrillSheetApp(ttk.Frame):
             messagebox.showerror("Invalid seed", "Seed must be a whole number.")
             return False, None
 
-    def _generate(self, output_path=None, output_dir=None):
+    def _generate(self, output_path=None, output_dir=None, seed=None):
         families = self._selected_families()
         if not families:
             messagebox.showerror("No families selected", "Select at least one fact family.")
             return
 
-        ok, seed = self._read_seed()
-        if not ok:
-            return
+        if seed is None:
+            ok, seed = self._read_seed()
+            if not ok:
+                return
 
         op = OPERATIONS[self.operation_var.get()]
 
@@ -151,9 +152,14 @@ class DrillSheetApp(ttk.Frame):
     def _on_save_as(self):
         op = OPERATIONS[self.operation_var.get()]
         families = self._selected_families()
-        seed_hint = self.seed_var.get().strip() or "random"
+
+        ok, seed = self._read_seed()
+        if not ok:
+            return
+        seed = resolve_seed(seed)
+
         slug = family_slug(families, MAX_FACTOR) if families else "none"
-        default_name = f"{op['output_prefix']}_{slug}_{seed_hint}.pdf"
+        default_name = f"{op['output_prefix']}_{slug}_{seed}.pdf"
 
         path = filedialog.asksaveasfilename(
             title="Save drill sheet as",
@@ -163,7 +169,7 @@ class DrillSheetApp(ttk.Frame):
             initialdir=str(self.last_save_dir),
         )
         if path:
-            self._generate(output_path=path)
+            self._generate(output_path=path, seed=seed)
 
 
 def main():
