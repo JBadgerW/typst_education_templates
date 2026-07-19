@@ -95,6 +95,8 @@ def generate_sheet(
             [
                 "typst",
                 "compile",
+                "--font-path",
+                str(BASE_DIR / "fonts"),
                 str(BASE_DIR / typst_file),
                 "--input",
                 f"data={data_path.name}",
