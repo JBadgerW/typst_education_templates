@@ -1,8 +1,33 @@
 import argparse
 import json
-import os
 import random
 import subprocess
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+OPERATIONS = {
+    "Multiplication": {
+        "typst_file": "multiplication_1.typ",
+        "output_prefix": "mult_facts",
+        "verb": "Multiply",
+    },
+    "Division": {
+        "typst_file": "division_1.typ",
+        "output_prefix": "div_facts",
+        "verb": "Divide",
+    },
+    "Addition": {
+        "typst_file": "addition_1.typ",
+        "output_prefix": "add_facts",
+        "verb": "Add",
+    },
+    "Subtraction": {
+        "typst_file": "subtraction_1.typ",
+        "output_prefix": "sub_facts",
+        "verb": "Subtract",
+    },
+}
 
 
 def build_arg_parser(description):
@@ -27,41 +52,54 @@ def build_arg_parser(description):
     return parser
 
 
-def run_sheet(args, typst_file, output_prefix, title, subtitle):
-    seed = args.seed if args.seed is not None else random.randint(100_000, 999_999)
+def generate_sheet(
+    families,
+    max_factor,
+    count,
+    seed,
+    typst_file,
+    output_prefix,
+    verb,
+    output_path=None,
+):
+    seed = seed if seed is not None else random.randint(100_000, 999_999)
     rng = random.Random(seed)
 
-    problems = generate_problems(
-        args.families, max_factor=args.max_factor, count=args.count, rng=rng
-    )
+    problems = generate_problems(families, max_factor=max_factor, count=count, rng=rng)
 
     data = {
         "seed": seed,
-        "title": title,
-        "subtitle": subtitle,
+        "title": f"{count} Facts",
+        "subtitle": subtitle_for(verb, families, max_factor),
         "problems": [{"a": a, "b": b} for a, b in problems],
     }
 
-    data_path = f"data_{seed}.json"
+    if output_path is None:
+        slug = family_slug(families, max_factor)
+        output_path = BASE_DIR / f"{output_prefix}_{slug}_{seed}.pdf"
+    else:
+        output_path = Path(output_path)
+
+    data_path = BASE_DIR / f"data_{seed}.json"
     with open(data_path, "w") as f:
         json.dump(data, f)
-
-    slug = family_slug(args.families, args.max_factor)
-    output_path = f"{output_prefix}_{slug}_{seed}.pdf"
 
     try:
         subprocess.run(
             [
                 "typst",
                 "compile",
-                typst_file,
+                str(BASE_DIR / typst_file),
                 "--input",
-                f"data={data_path}",
-                output_path,
-            ]
+                f"data={data_path.name}",
+                str(output_path),
+            ],
+            check=True,
         )
     finally:
-        os.remove(data_path)
+        data_path.unlink()
+
+    return seed, output_path
 
 
 def generate_problems(families, max_factor=12, count=90, rng=None):

@@ -1,18 +1,16 @@
-from drill_common import build_arg_parser, run_sheet, subtitle_for
+from drill_common import OPERATIONS, build_arg_parser, generate_sheet
 
 
 def main():
     parser = build_arg_parser("Generate a division drill sheet.")
     args = parser.parse_args()
 
-    subtitle = subtitle_for("Divide", args.families, args.max_factor)
-
-    run_sheet(
-        args,
-        typst_file="division_1.typ",
-        output_prefix="div_facts",
-        title=f"{args.count} Facts",
-        subtitle=subtitle,
+    generate_sheet(
+        families=args.families,
+        max_factor=args.max_factor,
+        count=args.count,
+        seed=args.seed,
+        **OPERATIONS["Division"],
     )
 
 
