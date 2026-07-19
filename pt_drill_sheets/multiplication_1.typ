@@ -1,11 +1,10 @@
-#import "@preview/suiji:0.5.1": *
 #import sys: inputs
 
-#let seed = int(sys.inputs.at("seed", default: "28056"))
-
-#let rng = gen-rng(
-  seed
-)
+#let data = json(sys.inputs.at("data"))
+#let seed = data.seed
+#let title = data.title
+#let subtitle = data.subtitle
+#let worksheet-problems = data.problems.map(p => (p.a, p.b))
 
 #set page(
   paper: "us-letter",
@@ -43,18 +42,6 @@
   [], if answer { [#product] } else { [] },
 )
 
-#let problems = (
-  ..for a in range(1, 13) {
-    for b in range(1, 13) {
-      ((a, b),)
-    }
-  },
-)
-
-#let shuffled-state = shuffle(rng, problems)
-
-#let worksheet-problems = shuffled-state.at(1).slice(0, 90) 
-
 // BEGINNING OF DOCUMENT CONTENT
 //
 // Name and Date header
@@ -74,7 +61,7 @@
   table.cell(
     inset: 4pt, 
     fill: black, 
-    text(size: 11pt, fill: white, weight: "bold")[90 Facts]
+    text(size: 11pt, fill: white, weight: "bold")[#title]
   ),
 
   table.cell(
@@ -83,7 +70,7 @@
       top: none,
     ),
     colspan: 7
-  )[Multiply up to 12],
+  )[#subtitle],
 
   table.cell(
     stroke: (
@@ -117,7 +104,7 @@
   table.cell(
     inset: 4pt, 
     fill: black, 
-    text(size: 11pt, fill: white, weight: "bold")[90 Facts]
+    text(size: 11pt, fill: white, weight: "bold")[#title]
   ),
 
   table.cell(
@@ -126,7 +113,7 @@
       top: none,
     ),
     colspan: 7
-  )[Multiply up to 12],
+  )[#subtitle],
 
   table.cell(
     stroke: (

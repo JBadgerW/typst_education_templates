@@ -1,15 +1,20 @@
-import subprocess
-import random
+from drill_common import build_arg_parser, build_subtitle, run_sheet
 
-seed = random.randint(100_000, 999_999)
 
-subprocess.run(
-    [
-        "typst",
-        "compile",
-        "addition_1.typ",
-        "--input",
-        f"seed={seed}",
-        f"add_facts_{seed}.pdf",
-    ]
-)
+def main():
+    parser = build_arg_parser("Generate an addition drill sheet.")
+    args = parser.parse_args()
+
+    subtitle = build_subtitle(args.families, f"Add up to {args.max_factor}")
+
+    run_sheet(
+        args,
+        typst_file="addition_1.typ",
+        output_prefix="add_facts",
+        title=f"{args.count} Facts",
+        subtitle=subtitle,
+    )
+
+
+if __name__ == "__main__":
+    main()
