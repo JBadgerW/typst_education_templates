@@ -46,6 +46,9 @@ def run_sheet(args, typst_file, output_prefix, title, subtitle):
     with open(data_path, "w") as f:
         json.dump(data, f)
 
+    slug = family_slug(args.families, args.max_factor)
+    output_path = f"{output_prefix}_{slug}_{seed}.pdf"
+
     try:
         subprocess.run(
             [
@@ -54,7 +57,7 @@ def run_sheet(args, typst_file, output_prefix, title, subtitle):
                 typst_file,
                 "--input",
                 f"data={data_path}",
-                f"{output_prefix}_{seed}.pdf",
+                output_path,
             ]
         )
     finally:
@@ -102,3 +105,7 @@ def format_family_ranges(families, max_factor):
 
 def subtitle_for(verb, families, max_factor):
     return f"{verb} the following families: {format_family_ranges(families, max_factor)}"
+
+
+def family_slug(families, max_factor):
+    return format_family_ranges(families, max_factor).replace(", ", "_")
