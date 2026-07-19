@@ -1,11 +1,11 @@
-from drill_common import build_arg_parser, build_subtitle, run_sheet
+from drill_common import build_arg_parser, run_sheet, subtitle_for
 
 
 def main():
     parser = build_arg_parser("Generate an addition drill sheet.")
     args = parser.parse_args()
 
-    subtitle = build_subtitle(args.families, f"Add up to {args.max_factor}")
+    subtitle = subtitle_for("Add", args.families, args.max_factor)
 
     run_sheet(
         args,

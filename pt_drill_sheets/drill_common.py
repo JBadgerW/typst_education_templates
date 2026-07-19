@@ -84,7 +84,21 @@ def generate_problems(families, max_factor=12, count=90, rng=None):
     return [rng.choice(pool) for _ in range(count)]
 
 
-def build_subtitle(families, default):
-    if families:
-        return f"Facts: {', '.join(str(f) for f in sorted(set(families)))}"
-    return default
+def format_family_ranges(families, max_factor):
+    values = sorted(set(families)) if families else list(range(1, max_factor + 1))
+
+    ranges = []
+    start = prev = values[0]
+    for v in values[1:]:
+        if v == prev + 1:
+            prev = v
+            continue
+        ranges.append((start, prev))
+        start = prev = v
+    ranges.append((start, prev))
+
+    return ", ".join(f"{lo}-{hi}" if lo != hi else f"{lo}" for lo, hi in ranges)
+
+
+def subtitle_for(verb, families, max_factor):
+    return f"{verb} the following families: {format_family_ranges(families, max_factor)}"
