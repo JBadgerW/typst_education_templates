@@ -15,6 +15,8 @@ class DrillSheetApp(ttk.Frame):
         master.title("Drill Sheet Generator")
         master.resizable(False, False)
 
+        self.master_bg = ttk.Style(master).lookup("TFrame", "background")
+
         self.operation_var = tk.StringVar(value="Multiplication")
         self.family_vars = {n: tk.BooleanVar(value=True) for n in range(1, MAX_FACTOR + 1)}
         self.seed_var = tk.StringVar()
@@ -46,9 +48,14 @@ class DrillSheetApp(ttk.Frame):
 
         for n in range(1, MAX_FACTOR + 1):
             r, c = divmod(n - 1, FAMILY_COLUMNS)
-            ttk.Checkbutton(frame, text=str(n), variable=self.family_vars[n]).grid(
-                row=r, column=c, sticky="w", padx=6, pady=3
-            )
+            tk.Checkbutton(
+                frame,
+                text=str(n),
+                variable=self.family_vars[n],
+                background=self.master_bg,
+                activebackground=self.master_bg,
+                highlightthickness=0,
+            ).grid(row=r, column=c, sticky="w", padx=6, pady=3)
 
         button_row = ttk.Frame(frame)
         button_row.grid(
