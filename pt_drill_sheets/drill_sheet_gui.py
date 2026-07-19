@@ -2,7 +2,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-from drill_common import OPERATIONS, family_slug, generate_sheet
+from drill_common import BASE_DIR, OPERATIONS, family_slug, generate_sheet
 
 MAX_FACTOR = 12
 DEFAULT_COUNT = 90
@@ -16,18 +16,17 @@ class DrillSheetApp(ttk.Frame):
         master.resizable(False, False)
 
         self.master_bg = ttk.Style(master).lookup("TFrame", "background")
+        self.last_save_dir = BASE_DIR
 
         self.operation_var = tk.StringVar(value="Multiplication")
         self.family_vars = {n: tk.BooleanVar(value=True) for n in range(1, MAX_FACTOR + 1)}
         self.seed_var = tk.StringVar()
-        self.output_var = tk.StringVar()
         self.status_var = tk.StringVar()
 
         self.grid(row=0, column=0, sticky="nsew")
         self._build_operation_row()
         self._build_family_section()
         self._build_seed_row()
-        self._build_output_section()
         self._build_actions()
 
     def _build_operation_row(self):
@@ -87,33 +86,67 @@ class DrillSheetApp(ttk.Frame):
             side="left", padx=(8, 0)
         )
 
-    def _build_output_section(self):
-        frame = ttk.LabelFrame(self, text="Output File", padding=10)
-        frame.grid(row=3, column=0, sticky="ew", pady=(0, 10))
-
-        entry_row = ttk.Frame(frame)
-        entry_row.pack(fill="x")
-        ttk.Entry(entry_row, textvariable=self.output_var, width=38).pack(
-            side="left", fill="x", expand=True
-        )
-        ttk.Button(entry_row, text="Save As...", command=self._on_save_as).pack(
-            side="left", padx=(8, 0)
-        )
-
-        ttk.Label(
-            frame,
-            text="Leave blank to auto-name and save next to the templates.",
-            foreground="gray",
-        ).pack(anchor="w", pady=(6, 0))
-
     def _build_actions(self):
         row = ttk.Frame(self)
-        row.grid(row=4, column=0, sticky="ew")
-        ttk.Button(row, text="Generate Sheet", command=self._on_generate).pack(side="left")
-        ttk.Label(row, textvariable=self.status_var).pack(side="left", padx=(10, 0))
+        row.grid(row=3, column=0, sticky="ew", pady=(4, 0))
+        ttk.Button(row, text="Save", command=self._on_save).pack(side="left")
+        ttk.Button(row, text="Save As...", command=self._on_save_as).pack(
+            side="left", padx=(6, 0)
+        )
+
+        status = ttk.Label(self, textvariable=self.status_var, foreground="gray")
+        status.grid(row=4, column=0, sticky="w", pady=(6, 0))
 
     def _selected_families(self):
         return sorted(n for n, var in self.family_vars.items() if var.get())
+
+    def _read_seed(self):
+        seed_text = self.seed_var.get().strip()
+        if not seed_text:
+            return True, None
+        try:
+            return True, int(seed_text)
+        except ValueError:
+            messagebox.showerror("Invalid seed", "Seed must be a whole number.")
+            return False, None
+
+    def _generate(self, output_path=None, output_dir=None):
+        families = self._selected_families()
+        if not families:
+            messagebox.showerror("No families selected", "Select at least one fact family.")
+            return
+
+        ok, seed = self._read_seed()
+        if not ok:
+            return
+
+        op = OPERATIONS[self.operation_var.get()]
+
+        try:
+            used_seed, saved_path = generate_sheet(
+                families=families,
+                max_factor=MAX_FACTOR,
+                count=DEFAULT_COUNT,
+                seed=seed,
+                output_path=output_path,
+                output_dir=output_dir,
+                **op,
+            )
+        except FileNotFoundError:
+            messagebox.showerror(
+                "Typst not found",
+                "Could not find the 'typst' command. Make sure it is installed and on your PATH.",
+            )
+            return
+        except subprocess.CalledProcessError:
+            messagebox.showerror("Compile failed", "Typst failed to compile the worksheet.")
+            return
+
+        self.last_save_dir = saved_path.parent
+        self.status_var.set(f"Saved {saved_path.name} to {saved_path.parent}")
+
+    def _on_save(self):
+        self._generate(output_dir=self.last_save_dir)
 
     def _on_save_as(self):
         op = OPERATIONS[self.operation_var.get()]
@@ -127,48 +160,10 @@ class DrillSheetApp(ttk.Frame):
             defaultextension=".pdf",
             filetypes=[("PDF files", "*.pdf")],
             initialfile=default_name,
+            initialdir=str(self.last_save_dir),
         )
         if path:
-            self.output_var.set(path)
-
-    def _on_generate(self):
-        families = self._selected_families()
-        if not families:
-            messagebox.showerror("No families selected", "Select at least one fact family.")
-            return
-
-        seed_text = self.seed_var.get().strip()
-        seed = None
-        if seed_text:
-            try:
-                seed = int(seed_text)
-            except ValueError:
-                messagebox.showerror("Invalid seed", "Seed must be a whole number.")
-                return
-
-        op = OPERATIONS[self.operation_var.get()]
-        output_path = self.output_var.get().strip() or None
-
-        try:
-            used_seed, saved_path = generate_sheet(
-                families=families,
-                max_factor=MAX_FACTOR,
-                count=DEFAULT_COUNT,
-                seed=seed,
-                output_path=output_path,
-                **op,
-            )
-        except FileNotFoundError:
-            messagebox.showerror(
-                "Typst not found",
-                "Could not find the 'typst' command. Make sure it is installed and on your PATH.",
-            )
-            return
-        except subprocess.CalledProcessError:
-            messagebox.showerror("Compile failed", "Typst failed to compile the worksheet.")
-            return
-
-        self.status_var.set(f"Saved {saved_path.name} (seed {used_seed})")
+            self._generate(output_path=path)
 
 
 def main():

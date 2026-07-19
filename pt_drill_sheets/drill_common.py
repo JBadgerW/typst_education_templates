@@ -61,6 +61,7 @@ def generate_sheet(
     output_prefix,
     verb,
     output_path=None,
+    output_dir=None,
 ):
     seed = seed if seed is not None else random.randint(100_000, 999_999)
     rng = random.Random(seed)
@@ -76,7 +77,8 @@ def generate_sheet(
 
     if output_path is None:
         slug = family_slug(families, max_factor)
-        output_path = BASE_DIR / f"{output_prefix}_{slug}_{seed}.pdf"
+        base = Path(output_dir) if output_dir is not None else BASE_DIR
+        output_path = base / f"{output_prefix}_{slug}_{seed}.pdf"
     else:
         output_path = Path(output_path)
 
