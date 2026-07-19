@@ -18,7 +18,8 @@
 
 #set text(
   // font: "New Computer Modern",
-  font: "Helvetica Neue",
+  // font: "Helvetica Neue",
+  font: "Nimbus Sans",
   size: 12pt,
 )
 
@@ -29,35 +30,28 @@
   stroke: (bottom: 0.7pt),
 )
 
-#let multiplication(a, b, product, answer: false) = table(
-  columns: (auto, auto),
-  align: (right, right),
-  stroke: none,
-
-  [], [#a],
-  [$times$], [#b],
-
-  table.hline(),
-
-  [], if answer { [#product] } else { [] },
-)
-
+// This works best with 'Nimbus Sans' or 'Helvetica Neue'
+// but will also work with Typst's default 'Libertinus Serif'
 #let division(dividend, divisor, quotient, answer: false) = {
   table(
     columns: (auto, auto),
-    stroke: none,
-    inset: 0.08em,
+    stroke: 0.0em + red,
+    inset: 0.12em,
     align: right + top,
     [],
     [#if answer { [#quotient] } else { [] }],
-    table.cell(inset: (top: 0.2em))[#divisor],
+    table.cell(inset: (top: 0.28em))[#divisor],
     [
       #grid(
         columns: (auto, auto),
-        stroke: (top: 0.06em),
-        inset: (top: 0.05em),
-        [)],//[#h(-0.03em))],
-        grid.cell(inset: (top: 0.12em))[#dividend]
+        grid.cell(
+          inset: (top: 0.1175em)
+        )[#h(-0.15em)\u{27CC}],
+
+        grid.cell(
+          stroke: (top: 0.053em), 
+          inset: (top: 0.155em)
+        )[#dividend]
       )
     ]
   )

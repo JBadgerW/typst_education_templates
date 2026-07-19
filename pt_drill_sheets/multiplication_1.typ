@@ -18,7 +18,8 @@
 
 #set text(
   // font: "New Computer Modern",
-  font: "Helvetica Neue",
+  // font: "Helvetica Neue",
+  font: "Nimbus Sans",
   size: 12pt,
 )
 
