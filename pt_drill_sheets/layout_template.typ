@@ -19,7 +19,7 @@
     top: 0.35in,
     left: 0.5in,
     right: 0.5in,
-    bottom: 1.25in, //  Why on earth does 0.85in = 0.5in? 
+    bottom: 1.5in, //  Why does 1.5in == 0.5? 
   ) 
 )
 
@@ -44,7 +44,12 @@
 
   table.hline(),
 
-  [], if answer { [#text(fill: red)[#product]] } else { [] },
+  [], if answer {[
+    #text(
+      fill: red, 
+      weight: "bold"
+    )[#product]
+  ]} else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT
@@ -62,7 +67,7 @@
   ),
 
   grid.cell(
-    stroke: 0.7pt,
+    stroke: 1pt,
     {
       show table.cell: set text(size: 10pt)
       table(
@@ -72,11 +77,11 @@
         stroke: none,
         align: bottom,
 
-        [\# correct #answer-blank(2cm)],
-        [\# wrong #answer-blank(2cm)],
+        [Timing: #answer-blank(1.5cm) sec],
+        [\# correct #answer-blank(1.5cm) /min],
 
-        [timing #answer-blank(2cm) sec],
-        [freq #answer-blank(2cm) /min]
+        [],
+        [\# wrong #answer-blank(1.5cm) /min]
       )
     }
   )
