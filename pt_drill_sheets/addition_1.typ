@@ -40,7 +40,7 @@
 
   table.hline(),
 
-  [], if answer { [#sum] } else { [] },
+  [], if answer { [#text(fill: red)[#sum]] } else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT

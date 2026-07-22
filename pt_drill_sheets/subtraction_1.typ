@@ -40,7 +40,7 @@
 
   table.hline(),
 
-  [], if answer { [#difference] } else { [] },
+  [], if answer { [#text(fill: red)[#difference]] } else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT

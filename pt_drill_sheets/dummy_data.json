@@ -1,6 +1,6 @@
 {
   "seed": 123456,
-  "title": "90 Facts",
+  "title": "Multiplication Facts",
   "subtitle": "Multiply the following families: 1-12",
   "problems": [
     {"a": 1, "b": 1}, {"a": 1, "b": 2}, {"a": 1, "b": 3}, {"a": 1, "b": 4}, {"a": 1, "b": 5},

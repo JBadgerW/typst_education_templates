@@ -90,7 +90,7 @@
     // stroke: 1pt + red,
     inset: 0em,
     grid.cell(align: right)[],
-    grid.cell(align: right, inset: (bottom: 0.15em, right: overshoot))[#if answer [#quotient] else []],
+    grid.cell(align: right, inset: (bottom: 0.15em, right: overshoot))[#if answer [#text(fill: red)[#quotient]] else []],
     grid.cell(align: right + bottom, inset: (right: 0.05em))[#divisor],
     grid.cell(align: left + bottom)[#sign],
   )

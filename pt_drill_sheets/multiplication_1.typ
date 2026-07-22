@@ -40,7 +40,7 @@
 
   table.hline(),
 
-  [], if answer { [#product] } else { [] },
+  [], if answer { [#text(fill: red)[#product]] } else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT
