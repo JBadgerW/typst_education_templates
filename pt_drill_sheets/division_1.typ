@@ -55,7 +55,7 @@
   let dw = dsize.width
   let dh = dsize.height
 
-  let bar-gap = 0.05em // clearance between bar and tops of the dividend digits
+  let bar-gap = 0.08em // clearance between bar and tops of the dividend digits
   let overshoot = 0.12em // how far the bar runs past the dividend's right edge
   let pad = 0.05em // margin so nothing gets clipped
 

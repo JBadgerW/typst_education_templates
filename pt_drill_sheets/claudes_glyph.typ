@@ -23,14 +23,13 @@
   stroke: (bottom: 0.7pt),
 )
 
-
 // The division-sign hook: a simple hand-drawn crescent (flat caps top and
 // bottom, two cubics bulging out to the right). Drawn as its own closed
 // shape, independent of the bar, which is a separate rectangle overlapping
 // the hook's top cap -- much simpler than trying to make one continuous
 // path do both jobs, and any overlap between the two is invisible since
 // both are solid black. Proportions as fractions of the hook's own height:
-#let cap-w   = 0.10   // width of the flat cap at top and bottom
+#let cap-w = 0.10   // width of the flat cap at top and bottom
 #let outer-x = 0.33   // outer curve's bulge, at mid-height
 #let inner-x = 0.20   // inner curve's bulge, at mid-height
 
@@ -44,13 +43,13 @@
   let dw = dsize.width
   let dh = dsize.height
 
-  let bar-gap   = 0.05em   // clearance between bar and tops of the dividend digits
-  let overshoot = 0.12em   // how far the bar runs past the dividend's right edge
-  let pad       = 0.05em   // margin so nothing gets clipped
+  let bar-gap = 0.08em // clearance between bar and tops of the dividend digits
+  let overshoot = 0.12em // how far the bar runs past the dividend's right edge
+  let pad = 0.05em // margin so nothing gets clipped
 
-  let scale = dh + bar-gap        // reference height: dividend height + gap
-  let hook-h = scale * hook-height-factor   // hook's own (taller) height
-  let bar-thick = scale * cap-w   // bar thickness matches the hook's own cap width
+  let scale = dh + bar-gap // reference height: dividend height + gap
+  let hook-h = scale * hook-height-factor // hook's own (taller) height
+  let bar-thick = scale * cap-w // bar thickness matches the hook's own cap width
   let bar-end = scale * outer-x + dw + overshoot
 
   let sign-w = bar-end + pad
@@ -73,7 +72,12 @@
       ),
       curve.close(mode: "straight"),
     ))
-    #place(top + left, dx: 0.05em, rect(fill: black, stroke: none, width: bar-end, height: bar-thick))
+    #place(top + left, dx: 0.05em, rect(
+      fill: black,
+      stroke: none,
+      width: bar-end,
+      height: bar-thick,
+    ))
     #place(bottom + left, dx: 0.3em)[#dividend]
   ]
 
@@ -83,7 +87,10 @@
     // stroke: 1pt + red,
     inset: 0em,
     grid.cell(align: right)[],
-    grid.cell(align: right, inset: (bottom: 0.15em, right: overshoot))[#if answer [#quotient] else []],
+    grid.cell(align: right, inset: (
+      bottom: 0.15em,
+      right: overshoot,
+    ))[#if answer [#quotient] else []],
     grid.cell(align: right + bottom, inset: (right: 0.05em))[#divisor],
     grid.cell(align: left + bottom)[#sign],
   )

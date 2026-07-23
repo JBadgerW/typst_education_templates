@@ -58,6 +58,7 @@ def resolve_seed(seed):
 
 
 def generate_sheet(
+    operation,
     families,
     max_factor,
     count,
@@ -75,8 +76,8 @@ def generate_sheet(
 
     data = {
         "seed": seed,
-        "title": f"{count} Facts",
-        "subtitle": subtitle_for(verb, families, max_factor),
+        "title": f"{operation} Facts",
+        "ws-details": ws_details_for(verb, families, max_factor),
         "problems": [{"a": a, "b": b} for a, b in problems],
     }
 
@@ -103,9 +104,7 @@ def generate_problems(families, max_factor=12, count=90, rng=None):
 
     if families is None:
         pool = [
-            (a, b)
-            for a in range(1, max_factor + 1)
-            for b in range(1, max_factor + 1)
+            (a, b) for a in range(1, max_factor + 1) for b in range(1, max_factor + 1)
         ]
     else:
         family_set = set(families)
@@ -137,8 +136,10 @@ def format_family_ranges(families, max_factor):
     return ", ".join(f"{lo}-{hi}" if lo != hi else f"{lo}" for lo, hi in ranges)
 
 
-def subtitle_for(verb, families, max_factor):
-    return f"{verb} the following families: {format_family_ranges(families, max_factor)}"
+def ws_details_for(verb, families, max_factor):
+    return (
+        f"{verb} the following families: {format_family_ranges(families, max_factor)}"
+    )
 
 
 def family_slug(families, max_factor):

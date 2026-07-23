@@ -20,7 +20,9 @@ class DrillSheetApp(ttk.Frame):
         self.last_save_dir = BASE_DIR
 
         self.operation_var = tk.StringVar(value="Multiplication")
-        self.family_vars = {n: tk.BooleanVar(value=True) for n in range(1, MAX_FACTOR + 1)}
+        self.family_vars = {
+            n: tk.BooleanVar(value=True) for n in range(1, MAX_FACTOR + 1)
+        }
         self.seed_var = tk.StringVar()
         self.status_var = tk.StringVar()
 
@@ -65,7 +67,9 @@ class DrillSheetApp(ttk.Frame):
             pady=(8, 0),
             sticky="w",
         )
-        ttk.Button(button_row, text="Check All", command=self._check_all).pack(side="left")
+        ttk.Button(button_row, text="Check All", command=self._check_all).pack(
+            side="left"
+        )
         ttk.Button(button_row, text="Uncheck All", command=self._uncheck_all).pack(
             side="left", padx=(6, 0)
         )
@@ -82,7 +86,9 @@ class DrillSheetApp(ttk.Frame):
         row = ttk.Frame(self)
         row.grid(row=2, column=0, sticky="ew", pady=(0, 10))
         ttk.Label(row, text="Seed (optional):").pack(side="left")
-        ttk.Entry(row, textvariable=self.seed_var, width=12).pack(side="left", padx=(8, 0))
+        ttk.Entry(row, textvariable=self.seed_var, width=12).pack(
+            side="left", padx=(8, 0)
+        )
         ttk.Label(row, text="Leave blank for random", foreground="gray").pack(
             side="left", padx=(8, 0)
         )
@@ -114,7 +120,9 @@ class DrillSheetApp(ttk.Frame):
     def _generate(self, output_path=None, output_dir=None, seed=None):
         families = self._selected_families()
         if not families:
-            messagebox.showerror("No families selected", "Select at least one fact family.")
+            messagebox.showerror(
+                "No families selected", "Select at least one fact family."
+            )
             return
 
         if seed is None:
@@ -122,10 +130,13 @@ class DrillSheetApp(ttk.Frame):
             if not ok:
                 return
 
-        op = OPERATIONS[self.operation_var.get()]
+        operation = self.operation_var.get()
+
+        op = OPERATIONS[operation]
 
         try:
             used_seed, saved_path = generate_sheet(
+                operation=operation,
                 families=families,
                 max_factor=MAX_FACTOR,
                 count=DEFAULT_COUNT,
@@ -135,7 +146,9 @@ class DrillSheetApp(ttk.Frame):
                 **op,
             )
         except typst.TypstError as exc:
-            messagebox.showerror("Compile failed", f"Typst failed to compile the worksheet:\n{exc}")
+            messagebox.showerror(
+                "Compile failed", f"Typst failed to compile the worksheet:\n{exc}"
+            )
             return
 
         self.last_save_dir = saved_path.parent
