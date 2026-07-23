@@ -19,8 +19,8 @@
     top: 0.35in,
     left: 0.5in,
     right: 0.5in,
-    bottom: 1.5in, //  Why does 1.5in == 0.5? 
-  ) 
+    bottom: 1.5in, //  Why does 1.5in == 0.5?
+  ),
 )
 
 #set text(
@@ -44,17 +44,20 @@
 
   table.hline(),
 
-  [], if answer {[
-    #text(
-      fill: red, 
-      weight: "bold"
-    )[#product]
-  ]} else { [] },
+  [],
+  if answer {
+    [
+      #text(
+        fill: red,
+        weight: "bold",
+      )[#product]
+    ]
+  } else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT
 
-// HEADER: Name/Date // Timing // Best counts 
+// HEADER: Name/Date // Timing // Best counts
 #let header = grid(
   columns: (auto, auto),
   column-gutter: 1fr,
@@ -73,18 +76,17 @@
       table(
         columns: (auto, auto),
         rows: (0.75cm, 0.75cm),
-        column-gutter: (0.25cm),
+        column-gutter: 0.25cm,
         stroke: none,
         align: bottom,
 
         [Timing: #answer-blank(1.5cm) sec],
         [\# correct #answer-blank(1.5cm) /min],
 
-        [],
-        [\# wrong #answer-blank(1.5cm) /min]
+        [], [\# wrong #answer-blank(1.5cm) /min],
       )
-    }
-  )
+    },
+  ),
 )
 
 #let title-bar = table(
@@ -94,10 +96,10 @@
     inset: 4pt,
     fill: black,
     stroke: 1pt,
-    text(size: 11pt, fill: white, weight: "bold")[#title]
+    text(size: 11pt, fill: white, weight: "bold")[#title],
   ),
   [#subtitle],
-  [#text(size: 8pt)[Seed: #seed]]
+  [#text(size: 8pt)[Seed: #seed]],
 )
 
 #let problem-grid = {
@@ -105,12 +107,12 @@
     columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
     rows: (1fr, 1fr),
     column-gutter: 0pt,
-    inset: (top: 7pt, right: 10pt, left:10pt, bottom: 5pt),
+    inset: (top: 7pt, right: 10pt, left: 10pt, bottom: 5pt),
 
-     ..for (a, b) in worksheet-problems {
+    ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #multiplication(a, b, (a*b), answer: false)
+          #multiplication(a, b, (a * b), answer: false)
         ],
       )
     }
@@ -120,14 +122,14 @@
 #let answer-grid = {
   table(
     columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-    rows: (1fr),
+    rows: 1fr,
     column-gutter: 0pt,
-    inset: (top: 7pt, right: 10pt, left:10pt, bottom: 5pt),
+    inset: (top: 7pt, right: 10pt, left: 10pt, bottom: 5pt),
 
     ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #multiplication(a, b, (a*b), answer: true)
+          #multiplication(a, b, (a * b), answer: true)
         ],
       )
     }
@@ -142,8 +144,8 @@
     dir: ttb,
     spacing: 0cm,
     title-bar,
-    problem-grid  
-  )
+    problem-grid,
+  ),
 )
 
 #pagebreak()
@@ -158,7 +160,8 @@
     dir: ttb,
     spacing: 0cm,
     title-bar,
-    answer-grid
-  )
+    answer-grid,
+  ),
 )
+
 
