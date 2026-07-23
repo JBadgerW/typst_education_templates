@@ -10,7 +10,7 @@
 }
 #let seed = data.seed
 #let title = data.title
-#let subtitle = data.subtitle
+#let ws-details = data.ws-details
 #let worksheet-problems = data.problems.map(p => (p.a, p.b))
 
 #set page(
@@ -98,7 +98,7 @@
     stroke: 1pt,
     text(size: 11pt, fill: white, weight: "bold")[#title],
   ),
-  [#subtitle],
+  [#ws-details],
   [#text(size: 8pt)[Seed: #seed]],
 )
 
@@ -107,7 +107,7 @@
     columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
     rows: (1fr, 1fr),
     column-gutter: 0pt,
-    inset: (top: 7pt, right: 10pt, left: 10pt, bottom: 5pt),
+    align: (top + center),
 
     ..for (a, b) in worksheet-problems {
       (
@@ -124,7 +124,7 @@
     columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
     rows: 1fr,
     column-gutter: 0pt,
-    inset: (top: 7pt, right: 10pt, left: 10pt, bottom: 5pt),
+    align: (top + center),
 
     ..for (a, b) in worksheet-problems {
       (

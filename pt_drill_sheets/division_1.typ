@@ -1,28 +1,33 @@
 #import sys: inputs
+#import "layout_template.typ": header, title-bar
 
-#let data = json(bytes(sys.inputs.at("data")))
+// Compile this file directly (no --input data=...) to use dummy_data.json
+// for layout experiments. The real pipeline in drill_common.py always
+// passes "data", so it's unaffected.
+#let data = if "data" in sys.inputs {
+  json(bytes(sys.inputs.at("data")))
+} else {
+  json("dummy_data.json")
+}
 #let seed = data.seed
 #let title = data.title
-#let subtitle = data.subtitle
+#let ws-details = data.ws-details
 #let worksheet-problems = data.problems.map(p => (p.a, p.b))
 
 #set page(
   paper: "us-letter",
   margin: (
-    top: 0.5in,
+    top: 0.35in,
     left: 0.5in,
     right: 0.5in,
-    bottom: 0.85in, //  Why on earth does 0.85in = 0.5in? 
-  ) 
+    bottom: 1.5in, //  Why does 1.5in == 0.5?
+  ),
 )
 
 #set text(
-  // font: "New Computer Modern",
-  // font: "Helvetica Neue",
   font: "Nimbus Sans",
   size: 12pt,
 )
-
 
 #let answer-blank(width) = box(
   width: width,
@@ -30,14 +35,13 @@
   stroke: (bottom: 0.7pt),
 )
 
-
 // The division-sign hook: a simple hand-drawn crescent (flat caps top and
 // bottom, two cubics bulging out to the right). Drawn as its own closed
 // shape, independent of the bar, which is a separate rectangle overlapping
 // the hook's top cap -- much simpler than trying to make one continuous
 // path do both jobs, and any overlap between the two is invisible since
 // both are solid black. Proportions as fractions of the hook's own height:
-#let cap-w   = 0.10   // width of the flat cap at top and bottom
+#let cap-w = 0.10   // width of the flat cap at top and bottom
 #let outer-x = 0.33   // outer curve's bulge, at mid-height
 #let inner-x = 0.20   // inner curve's bulge, at mid-height
 
@@ -51,13 +55,13 @@
   let dw = dsize.width
   let dh = dsize.height
 
-  let bar-gap   = 0.05em   // clearance between bar and tops of the dividend digits
-  let overshoot = 0.12em   // how far the bar runs past the dividend's right edge
-  let pad       = 0.05em   // margin so nothing gets clipped
+  let bar-gap = 0.05em // clearance between bar and tops of the dividend digits
+  let overshoot = 0.12em // how far the bar runs past the dividend's right edge
+  let pad = 0.05em // margin so nothing gets clipped
 
-  let scale = dh + bar-gap        // reference height: dividend height + gap
-  let hook-h = scale * hook-height-factor   // hook's own (taller) height
-  let bar-thick = scale * cap-w   // bar thickness matches the hook's own cap width
+  let scale = dh + bar-gap // reference height: dividend height + gap
+  let hook-h = scale * hook-height-factor // hook's own (taller) height
+  let bar-thick = scale * cap-w // bar thickness matches the hook's own cap width
   let bar-end = scale * outer-x + dw + overshoot
 
   let sign-w = bar-end + pad
@@ -80,7 +84,12 @@
       ),
       curve.close(mode: "straight"),
     ))
-    #place(top + left, dx: 0.05em, rect(fill: black, stroke: none, width: bar-end, height: bar-thick))
+    #place(top + left, dx: 0.05em, rect(
+      fill: black,
+      stroke: none,
+      width: bar-end,
+      height: bar-thick,
+    ))
     #place(bottom + left, dx: 0.3em)[#dividend]
   ]
 
@@ -90,112 +99,84 @@
     // stroke: 1pt + red,
     inset: 0em,
     grid.cell(align: right)[],
-    grid.cell(align: right, inset: (bottom: 0.15em, right: overshoot))[#if answer [#text(fill: red)[#quotient]] else []],
+    grid.cell(align: right, inset: (
+      bottom: 0.15em,
+      right: overshoot,
+    ))[#if answer [#text(fill: red, weight: "bold")[#quotient]] else []],
     grid.cell(align: right + bottom, inset: (right: 0.05em))[#divisor],
     grid.cell(align: left + bottom)[#sign],
   )
 }
 
+
 // BEGINNING OF DOCUMENT CONTENT
-//
-// Name and Date header
-#grid(
-  columns: (1fr, auto),
-  column-gutter: 0pt,
-  [Name #answer-blank(3in)],
-  align(right)[Date #answer-blank(3.5cm)],
-)
 
-#table(
-  columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-  rows: (auto, 1fr),
-  column-gutter: 0pt,
-  inset: (bottom: 30pt),
-  align: center + bottom,
+#let problem-grid = {
+  table(
+    columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
+    rows: (1fr, 1fr),
+    column-gutter: 0pt,
+    inset: (bottom: 25pt),
+    align: center + bottom, 
 
-  table.cell(
-    inset: 4pt, 
-    fill: black, 
-    align: center + horizon,
-    text(size: 11pt, fill: white, weight: "bold")[#title]
+    ..for (a, b) in worksheet-problems {
+      (
+        table.cell[
+          #division((a * b), b, a, answer: false)
+        ],
+      )
+    }
+  )
+}
+
+#let answer-grid = {
+  table(
+    columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
+    rows: 1fr,
+    column-gutter: 0pt,
+    inset: (bottom: 25pt),
+    align: center + bottom, 
+
+    ..for (a, b) in worksheet-problems {
+      (
+        table.cell[
+          #division((a * b), b, a, answer: true)
+        ],
+      )
+    }
+  )
+}
+
+// LAYOUT
+
+// Problems
+
+#stack(
+  dir: ttb,
+  spacing: 0.3cm,
+  header,
+  stack(
+    dir: ttb,
+    spacing: 0cm,
+    title-bar,
+    problem-grid,
   ),
-
-  table.cell(
-    stroke: (
-      right: none,
-      top: none,
-    ),
-    colspan: 7,
-    align: left + horizon,
-    inset: (bottom: 5pt),
-  )[#subtitle],
-
-  table.cell(
-    stroke: (
-      left: none,
-      right: none,
-      top: none,
-    ),
-    colspan: 2, 
-    align: right + horizon,
-    inset: (bottom: 5pt),
-  )[#text(size: 8pt)[Seed: #seed]],
-
-  ..for (a, b) in worksheet-problems {
-    (
-      table.cell[
-        #division((a*b), b, a, answer: false)
-      ],
-    )
-  }
 )
 
 #pagebreak()
 
-= Answers
+// Answers
 
-#table(
-  columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-  rows: (auto, 1fr),
-  column-gutter: 0pt,
-  inset: (bottom: 30pt),
-  align: center + bottom,
-
-
-  table.cell(
-    inset: 4pt, 
-    fill: black, 
-    align: center + horizon,
-    text(size: 11pt, fill: white, weight: "bold")[#title]
+#stack(
+  dir: ttb,
+  spacing: 1.3cm,
+  [= Answers],
+  stack(
+    dir: ttb,
+    spacing: 0cm,
+    title-bar,
+    answer-grid,
   ),
-
-  table.cell(
-    stroke: (
-      right: none,
-      top: none,
-    ),
-    colspan: 7,
-    align: left + horizon,
-    inset: (bottom: 5pt),
-  )[#subtitle],
-
-  table.cell(
-    stroke: (
-      left: none,
-      right: none,
-      top: none,
-    ),
-    colspan: 2, 
-    align: right + horizon,
-    inset: (bottom: 5pt),
-  )[#text(size: 8pt)[Seed: #seed]],
-
-  ..for (a, b) in worksheet-problems {
-    (
-      table.cell[
-        #division((a*b), b, a, answer: true)
-      ],
-    )
-  }
 )
+
 
