@@ -2,7 +2,7 @@ import math
 import random
 from typing import Sequence
 
-FACT_FAMILIES = [1, 2, 8, 10]
+FACT_FAMILIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 DEFAULT_NUMBER_OF_FACTS = 206
 MAX_FACTOR = 12
 
