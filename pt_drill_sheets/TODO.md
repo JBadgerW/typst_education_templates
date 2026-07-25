@@ -1,7 +1,13 @@
 TO DO
 =====
 
-- [ ] (2026-07-23) The GUI exposes the random number seed, which is just 
+- [ ] (2026-07-23) The fact families don't necessarily work with the division 
+(and, I suspect, the subtraction, as well), since sometimes the divisor (or the
+subtrahend) ends up being one of the other numbers. In such a case, the answer
+is in the fact family, but that isn't really how I want to test or work out the
+students with the fact families.
+
+- [X] (2026-07-23) The GUI exposes the random number seed, which is just 
 unnecessary, IMO. The people using the GUI won't care about particular seeds,
 and the ones who do will be able to use the command line pipeline. So I want to
 remove the Seed setting field in the GUI and replace it with a field that allows
