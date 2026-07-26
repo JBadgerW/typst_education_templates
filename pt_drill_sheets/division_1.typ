@@ -49,7 +49,7 @@
 // below the baseline instead of just matching the digits top-to-bottom.
 #let hook-height-factor = 1.3
 
-#let division(dividend, divisor, quotient, answer: false) = context {
+#let division(divisor, dividend, quotient, answer: false) = context {
   let dividend-body = [#dividend]
   let dsize = measure(dividend-body)
   let dw = dsize.width
@@ -122,7 +122,7 @@
     ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #division((a * b), b, a, answer: false)
+          #division(a, (a * b), b, answer: false)
         ],
       )
     }
@@ -140,7 +140,7 @@
     ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #division((a * b), b, a, answer: true)
+          #division(a, (a * b), b, answer: true)
         ],
       )
     }

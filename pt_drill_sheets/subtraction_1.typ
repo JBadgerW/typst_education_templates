@@ -35,7 +35,7 @@
   stroke: (bottom: 0.7pt),
 )
 
-#let subtraction(minuend, subtrahend, difference, answer: false) = table(
+#let subtraction(subtrahend, minuend, difference, answer: false) = table(
   columns: (auto, auto),
   align: (right, right),
   stroke: none,
@@ -61,7 +61,7 @@
     ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #subtraction((a + b), b, a, answer: false)
+          #subtraction(a, (a + b), b, answer: false)
         ],
       )
     }
@@ -78,7 +78,7 @@
     ..for (a, b) in worksheet-problems {
       (
         table.cell[
-          #subtraction((a + b), b, a, answer: true)
+          #subtraction(a, (a + b), b, answer: true)
         ],
       )
     }
