@@ -1,15 +1,3 @@
-import os
-
-# Some GTK modules injected via GTK_MODULES (e.g. appmenu-gtk-module, used by
-# Cinnamon/Unity-style global-menu integration) spawn a thread that touches
-# the same X11 connection Tk uses, without calling XInitThreads(). Tk's
-# filedialog on Linux shells out to native GTK, which loads those modules and
-# crashes with "[xcb] Unknown sequence number ... XInitThreads has not been
-# called". Clearing GTK_MODULES before any dialog is opened avoids loading
-# them in this process. Must be set before the first filedialog call (GTK
-# reads it lazily on first use), so do it here at import time.
-os.environ["GTK_MODULES"] = ""
-
 import tempfile
 import tkinter as tk
 from pathlib import Path
