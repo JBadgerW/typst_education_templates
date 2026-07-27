@@ -6,6 +6,7 @@ from pathlib import Path
 import typst
 
 BASE_DIR = Path(__file__).resolve().parent
+TEST_OUTPUT_PATH = Path("~/Desktop/save_facts/")
 
 OPERATIONS = {
     "Multiplication": {
@@ -57,6 +58,34 @@ def resolve_seed(seed):
     return seed if seed is not None else random.randint(100_000, 999_999)
 
 
+def write_sheet(
+    data,
+    seed,
+    families,
+    max_factor,
+    typst_file,
+    output_prefix,
+    output_path=None,
+    output_dir=None,
+):
+    if output_path is None:
+        slug = family_slug(families, max_factor)
+        base = Path(output_dir) if output_dir is not None else BASE_DIR
+        output_path = base / f"{output_prefix}_{slug}_{seed}.pdf"
+    else:
+        output_path = Path(output_path)
+
+    typst.compile(
+        str(BASE_DIR / typst_file),
+        output=str(output_path),
+        font_paths=[str(BASE_DIR / "fonts")],
+        ignore_system_fonts=True,
+        sys_inputs={"data": json.dumps(data)},
+    )
+
+    return seed, output_path
+
+
 def generate_sheet(
     operation,
     families,
@@ -81,22 +110,16 @@ def generate_sheet(
         "problems": [{"a": a, "b": b} for a, b in problems],
     }
 
-    if output_path is None:
-        slug = family_slug(families, max_factor)
-        base = Path(output_dir) if output_dir is not None else BASE_DIR
-        output_path = base / f"{output_prefix}_{slug}_{seed}.pdf"
-    else:
-        output_path = Path(output_path)
-
-    typst.compile(
-        str(BASE_DIR / typst_file),
-        output=str(output_path),
-        font_paths=[str(BASE_DIR / "fonts")],
-        ignore_system_fonts=True,
-        sys_inputs={"data": json.dumps(data)},
+    return write_sheet(
+        data,
+        seed,
+        families,
+        max_factor,
+        typst_file,
+        output_prefix,
+        output_path,
+        output_dir,
     )
-
-    return seed, output_path
 
 
 def generate_problems(families, max_factor=12, count=90, rng=None):

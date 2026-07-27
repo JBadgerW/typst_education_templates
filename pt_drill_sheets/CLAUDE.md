@@ -4,15 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A generator for printable math drill sheets (addition, subtraction, multiplication, division fact
-families). Python builds a set of problems and hands them to Typst as JSON; Typst renders a
-two-page PDF (problem page + answer page) using a bundled font.
+A generator for printable math drill sheets. Two worksheet families exist: plain fact sheets
+(addition, subtraction, multiplication, division) and algebra sheets (the same four operations,
+rephrased as "solve for x"). Python decides *what* a sheet contains (which problems, which side of
+an equation is hidden); Typst decides *how* it's laid out. Python hands Typst a JSON payload; Typst
+renders a two-page PDF (problem page + answer page) using a bundled font.
 
 ## Setup and commands
-
-Dependencies are managed with `uv` (`uv.lock` + `pyproject.toml`, Python >=3.12 pinned via
-`.python-version`). `requirements.txt` (just `typst==0.15.0`) is a lighter-weight `pip install -r`
-alternative to the `uv` project.
 
 Generate a sheet from the CLI, e.g.:
 
@@ -25,65 +23,67 @@ The other three entry points (`new_addition_sheet.py`, `new_subtraction_sheet.py
 full table, omit `--seed` for a random one (it gets embedded in the output filename and printed on
 the sheet so a run can be reproduced later).
 
+`new_algebra_sheet.py` covers all four operations through one entry point (`--operation`, default
+Addition) plus `--unknown` (default `x`): non-letter characters are stripped and the remaining
+letters deduped into a set, then each problem draws its own unknown letter randomly from that set
+(so e.g. `--unknown xyn` mixes x/y/n across a sheet). Otherwise it takes the same flags.
+
 Run the desktop GUI (Tkinter) instead of the CLI:
 
 ```
 python drill_sheet_gui.py
 ```
 
-To iterate on Typst layout directly without going through Python, compile a template file with the
-system `typst` CLI — it will fall back to `dummy_data.json` for problem data (see "Dummy data
-fallback" below):
-
-```
-typst compile multiplication_1.typ --font-path fonts
-```
-
-Pass `--font-path fonts` (matching the `font_paths`/`ignore_system_fonts` used by
-`drill_common.generate_sheet`) so the preview matches what the real pipeline produces.
+See `.claude/skills/typst-preview/SKILL.md` for compiling a `.typ` template directly with the Typst
+CLI to preview layout changes without running the Python pipeline.
 
 There is no test suite, linter, or formatter configured in this repo.
 
 ## Architecture
 
-**`drill_common.py`** is the shared engine used by every entry point:
-- `OPERATIONS` maps each operation name to its Typst template file, output filename prefix, and verb
-  used in the worksheet subtitle (e.g. "Multiply the following families: 7-9, 12").
-- `generate_problems` samples `(a, b)` pairs from the `max_factor` × `max_factor` grid, optionally
-  restricted to pairs touching a given set of "families" (numbers), using a seeded `random.Random`.
-- `generate_sheet` resolves/records the seed, builds the JSON payload (`seed`, `title`,
-  `ws-details`, `problems`), and calls `typst.compile(...)` with `sys_inputs={"data": <json>}` plus
-  `font_paths=["fonts"]` and `ignore_system_fonts=True` so rendering doesn't depend on what's
-  installed on the machine. Output path defaults to `<prefix>_<family-slug>_<seed>.pdf` in the repo
-  root, or can be overridden with `output_path`/`output_dir`.
+**`drill_common.py`** is the shared engine behind the plain fact-sheet pipeline. Its `write_sheet`
+(resolve output path, call `typst.compile`) is also reused by the algebra pipeline below.
 
 **`new_<operation>_sheet.py`** files are thin CLI wrappers: build an argparser via
 `build_arg_parser`, then call `generate_sheet(..., **OPERATIONS["<Operation>"])`.
 
-**`drill_sheet_gui.py`** is a Tkinter/ttk GUI over the same `generate_sheet` function — checkboxes
-for fact families 1–12, an operation dropdown, an optional seed field, and Save / Save As buttons.
-Catches `typst.TypstError` and reports compile failures via a message box.
+**`facts_as_algebra.py`** is the algebra pipeline's equivalent of `drill_common.py`. Its
+`parse_unknown_letters` strips non-letters from the raw `--unknown` input and dedupes what's left
+into a sorted list. `generate_algebra_problems` samples ordered `(family, member)` pairs via
+`fact_families.get_facts` (not `drill_common.generate_problems` — see the division/subtraction
+fact-family caveat in `TODO.md`) and assigns each problem its own random `reverse` flag (which side
+of the equation the unknown lands on) and its own random `unknown` letter drawn from that list.
+`generate_algebra_sheet` packages those into JSON (`operation`, per-problem
+`family`/`member`/`reverse`/`unknown`) and calls `drill_common.write_sheet`. `new_algebra_sheet.py`
+is its CLI wrapper. Python only decides *which* problems, *which side* is hidden, and *which letter*
+is used — the actual equation text, the per-operation identity (e.g. subtraction's
+`x - family = member`), and the red/bold answer are entirely Typst's job in `algebra_1.typ`.
+
+**`drill_sheet_gui.py`** is a Tkinter/ttk GUI, structured as a `ttk.Notebook` with one tab per
+worksheet family: `FactSheetTab` (plain fact sheets) and `AlgebraTab` (algebra sheets, with an added
+"unknown letter" field). Both subclass `WorksheetTab`, which holds the shared scaffolding (operation
+dropdown, fact-family checkboxes, versions row, Save/Save As) and calls each subclass's
+`_generate_one`. Add a new worksheet family by subclassing `WorksheetTab` and adding it to the
+`notebook.add(...)` calls in `main()`.
 
 **Typst side** — each operation has its own template (`multiplication_1.typ`, `division_1.typ`,
-`addition_1.typ`, `subtraction_1.typ`). Each one:
-1. Reads `data` from `sys_inputs` (real pipeline) or falls back to `json("dummy_data.json")` when
-   compiled directly — this fallback is what lets you `typst compile <file>.typ` standalone while
-   experimenting with layout.
-2. Defines an operation-specific glyph function (e.g. `multiplication`, `division`) that renders one
-   problem as a small stacked table/grid, with an optional red bold answer.
-3. Builds a `problem-grid` (all problems, `answer: false`) and an `answer-grid` (`answer: true`),
-   laid out as a 10-column Typst `table`.
-4. Stacks `header` + `title-bar` + `problem-grid` on page 1, then `pagebreak()`s and stacks an
-   "Answers" heading + `title-bar` + `answer-grid` on page 2.
+`addition_1.typ`, `subtraction_1.typ`), rendering a compact stacked-digit glyph per problem.
+**`algebra_1.typ`** instead renders each problem as an inline equation (`algebra-equation`), reading
+`operation` plus per-problem `family`/`member`/`reverse`/`unknown` from the JSON and computing the
+equation's known/solved values itself — Python never builds Typst syntax. `unknown` arrives as a
+plain string, which Typst would otherwise show upright like a number, so every occurrence is wrapped
+in `math.italic(unknown)` to match how a literal variable typed directly in math source renders.
 
-**`layout_template.typ`** is a partially-extracted shared layout: `header` (Name/Date/Timing/Counts
-box) and `title-bar` (title + family description + seed) are defined here and imported by the four
-operation templates (`#import "layout_template.typ": header, title-bar`). Page setup (`#set page`,
-`#set text`), `answer-blank`, and each operation's own glyph function are **not** yet centralized —
-they're still duplicated verbatim across the four `*_1.typ` files. When editing shared layout
-(margins, fonts, header/title-bar), check whether the change needs to be mirrored into all four
-operation files, and prefer moving more of the duplicated pieces into `layout_template.typ` if you're
-touching them anyway.
+**`layout_template.typ`** exports only `header` (Name/Date/Timing/Counts box) and `title-bar` (title
++ family description + seed), imported by all five operation templates
+(`#import "layout_template.typ": header, title-bar`). It deliberately contains no per-operation
+content (problem grids, glyphs): importing a `.typ` file evaluates its whole module, so any code
+there referencing `data.problems` would need every importer's problem shape (`a`/`b` for fact
+sheets, `family`/`member`/`reverse` for algebra) to match, which they don't. Page setup (`#set
+page`, `#set text`), `answer-blank`, and each operation's own glyph/equation function are **not**
+centralized — they're duplicated verbatim across all five `*_1.typ`/`algebra_1.typ` files. When
+editing shared layout (margins, fonts, header/title-bar), check whether the change needs to be
+mirrored into all five operation files.
 
 **`claudes_glyph.typ`** is a standalone scratch file for prototyping the hand-drawn long-division
 sign (the curved hook + bar) at large size before it was copied into `division_1.typ`'s `division`

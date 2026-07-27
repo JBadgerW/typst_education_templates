@@ -11,7 +11,6 @@
 #let seed = data.seed
 #let title = data.title
 #let ws-details = data.ws-details
-#let worksheet-problems = data.problems.map(p => (p.a, p.b))
 
 #set page(
   paper: "us-letter",
@@ -32,27 +31,6 @@
   width: width,
   inset: 0pt,
   stroke: (bottom: 0.7pt),
-)
-
-#let multiplication(a, b, product, answer: false) = table(
-  columns: (auto, auto),
-  align: (right, right),
-  stroke: none,
-
-  [], [#a],
-  [$times$], [#b],
-
-  table.hline(),
-
-  [],
-  if answer {
-    [
-      #text(
-        fill: red,
-        weight: "bold",
-      )[#product]
-    ]
-  } else { [] },
 )
 
 // BEGINNING OF DOCUMENT CONTENT
@@ -102,66 +80,8 @@
   [#text(size: 8pt)[Seed: #seed]],
 )
 
-#let problem-grid = {
-  table(
-    columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-    rows: (1fr, 1fr),
-    column-gutter: 0pt,
-    align: (top + center),
-
-    ..for (a, b) in worksheet-problems {
-      (
-        table.cell[
-          #multiplication(a, b, (a * b), answer: false)
-        ],
-      )
-    }
-  )
-}
-
-#let answer-grid = {
-  table(
-    columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-    rows: 1fr,
-    column-gutter: 0pt,
-    align: (top + center),
-
-    ..for (a, b) in worksheet-problems {
-      (
-        table.cell[
-          #multiplication(a, b, (a * b), answer: true)
-        ],
-      )
-    }
-  )
-}
-
-#stack(
-  dir: ttb,
-  spacing: 0.3cm,
-  header,
-  stack(
-    dir: ttb,
-    spacing: 0cm,
-    title-bar,
-    problem-grid,
-  ),
-)
-
-#pagebreak()
-
-// Answers
-
-#stack(
-  dir: ttb,
-  spacing: 1.3cm,
-  [= Answers],
-  stack(
-    dir: ttb,
-    spacing: 0cm,
-    title-bar,
-    answer-grid,
-  ),
-)
-
+// Standalone preview only (typst compile layout_template.typ --font-path fonts):
+// shows header + title-bar on their own, since that's all this file exports.
+#header
+#title-bar
 

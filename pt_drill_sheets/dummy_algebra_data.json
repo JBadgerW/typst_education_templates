@@ -1,0 +1,23 @@
+{
+  "seed": 424242,
+  "title": "Algebra: Subtraction Facts",
+  "ws-details": "Solve for x, y. Families: 3-5, 8",
+  "operation": "subtraction",
+  "problems": [
+    {"family": 3, "member": 5, "reverse": false, "unknown": "x"},
+    {"family": 3, "member": 5, "reverse": true, "unknown": "y"},
+    {"family": 4, "member": 9, "reverse": false, "unknown": "x"},
+    {"family": 4, "member": 2, "reverse": true, "unknown": "y"},
+    {"family": 5, "member": 7, "reverse": false, "unknown": "x"},
+    {"family": 5, "member": 12, "reverse": true, "unknown": "y"},
+    {"family": 8, "member": 1, "reverse": false, "unknown": "x"},
+    {"family": 8, "member": 6, "reverse": true, "unknown": "y"},
+    {"family": 3, "member": 10, "reverse": false, "unknown": "x"},
+    {"family": 4, "member": 4, "reverse": true, "unknown": "y"},
+    {"family": 5, "member": 5, "reverse": false, "unknown": "x"},
+    {"family": 8, "member": 11, "reverse": true, "unknown": "y"},
+    {"family": 3, "member": 8, "reverse": false, "unknown": "x"},
+    {"family": 4, "member": 12, "reverse": true, "unknown": "y"},
+    {"family": 5, "member": 3, "reverse": false, "unknown": "x"}
+  ]
+}

@@ -6,6 +6,7 @@ def main():
     args = parser.parse_args()
 
     generate_sheet(
+        operation="Addition",
         families=args.families,
         max_factor=args.max_factor,
         count=args.count,
