@@ -12,8 +12,7 @@
 #let seed = data.seed
 #let title = data.title
 #let ws-details = data.ws-details
-#let operation = data.operation
-#let worksheet-problems = data.problems.map(p => (p.family, p.member, p.reverse, p.unknown))
+#let worksheet-problems = data.problems.map(p => (p.family, p.member, p.reverse, p.unknown, p.operation))
 
 #set page(
   paper: "us-letter",
@@ -34,7 +33,7 @@
 // as a plain number matching the same family/member convention the other
 // four templates use (subtraction's family is the subtrahend, division's is
 // the divisor) so the same fact_families.get_facts pairs work everywhere.
-#let known-value(family, member) = (
+#let known-value(family, member, operation) = (
   if operation == "addition" { family + member }
   else if operation == "subtraction" { member }
   else if operation == "multiplication" { family * member }
@@ -42,7 +41,7 @@
 )
 
 // The value `unknown` solves to.
-#let solved-value(family, member) = (
+#let solved-value(family, member, operation) = (
   if operation == "addition" { member }
   else if operation == "subtraction" { family + member }
   else if operation == "multiplication" { member }
@@ -53,16 +52,16 @@
 // `unknown` is a plain string (from Python, one letter per problem), so math
 // mode would otherwise show it upright like a number; math.italic() matches
 // how a literal variable like `x` typed directly in math source renders.
-#let unknown-side(family, unknown) = (
+#let unknown-side(family, unknown, operation) = (
   if operation == "addition" { $#math.italic(unknown) + #family$ }
   else if operation == "subtraction" { $#math.italic(unknown) - #family$ }
   else if operation == "multiplication" { $#family#math.italic(unknown)$ }
   else if operation == "division" { $display(#math.italic(unknown) / #family)$ }
 )
 
-#let algebra-equation(family, member, reverse, unknown, answer: false) = {
-  let lhs = if reverse { known-value(family, member) } else { unknown-side(family, unknown) }
-  let rhs = if reverse { unknown-side(family, unknown) } else { known-value(family, member) }
+#let algebra-equation(family, member, reverse, unknown, operation, answer: false) = {
+  let lhs = if reverse { known-value(family, member, operation) } else { unknown-side(family, unknown, operation) }
+  let rhs = if reverse { unknown-side(family, unknown, operation) } else { known-value(family, member, operation) }
 
   stack(
     dir: ttb,
@@ -70,7 +69,7 @@
     align(center)[$#lhs = #rhs$],
     if answer {
       align(center)[
-        #text(fill: red, weight: "bold")[$#math.italic(unknown) = #solved-value(family, member)$]
+        #text(fill: red, weight: "bold")[$#math.italic(unknown) = #solved-value(family, member, operation)$]
       ]
     },
   )
@@ -94,10 +93,10 @@
     align: (center + top),
     inset: (y: 10pt),
 
-    ..for (family, member, reverse, unknown) in worksheet-problems {
+    ..for (family, member, reverse, unknown, operation) in worksheet-problems {
       (
         table.cell[
-          #algebra-equation(family, member, reverse, unknown, answer: false)
+          #algebra-equation(family, member, reverse, unknown, operation, answer: false)
         ],
       )
     }
@@ -113,10 +112,10 @@
     align: (center + top),
     inset: (y: 10pt),
 
-    ..for (family, member, reverse, unknown) in worksheet-problems {
+    ..for (family, member, reverse, unknown, operation) in worksheet-problems {
       (
         table.cell[
-          #algebra-equation(family, member, reverse, unknown, answer: true)
+          #algebra-equation(family, member, reverse, unknown, operation, answer: true)
         ],
       )
     }

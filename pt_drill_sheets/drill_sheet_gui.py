@@ -50,6 +50,7 @@ class WorksheetTab(QWidget):
 
         self._build_operation_row(layout, default_operation)
         self._build_extra_controls(layout)
+        self._build_operations_section(layout)
         self._build_family_section(layout)
         self._build_versions_row(layout)
         self._build_actions(layout)
@@ -68,6 +69,11 @@ class WorksheetTab(QWidget):
     def _build_extra_controls(self, layout):
         """Hook for subclasses to add fields between the operation row and
         the fact-family checkboxes. No-op by default."""
+
+    def _build_operations_section(self, layout):
+        """Hook for subclasses to add an operations panel (e.g. for a "Mixed"
+        operation mode) between the extra controls and the fact-family
+        checkboxes. No-op by default."""
 
     def _build_family_section(self, layout):
         box = QGroupBox("Fact Families")
@@ -293,6 +299,35 @@ class AlgebraTab(WorksheetTab):
         row.addStretch()
         layout.addLayout(row)
 
+    def _build_operations_section(self, layout):
+        self.operations_groupbox = QGroupBox("Operations")
+        row = QHBoxLayout()
+        row.setContentsMargins(10, 10, 10, 10)
+
+        self.operation_checkboxes = {}
+        for name in ("Addition", "Subtraction", "Multiplication", "Division"):
+            checkbox = QCheckBox(name)
+            checkbox.setChecked(True)
+            self.operation_checkboxes[name] = checkbox
+            row.addWidget(checkbox)
+        row.addStretch()
+
+        self.operations_groupbox.setLayout(row)
+        self.operations_groupbox.setEnabled(False)
+        layout.addWidget(self.operations_groupbox)
+
+        self.operation_combo.currentTextChanged.connect(self._on_operation_changed)
+
+    def _on_operation_changed(self, text):
+        self.operations_groupbox.setEnabled(text == "Mixed")
+
+    def _selected_operations(self):
+        return [
+            name.lower()
+            for name, checkbox in self.operation_checkboxes.items()
+            if checkbox.isChecked()
+        ]
+
     def _validate_extra(self):
         try:
             parse_unknown_letters(self.unknown_line_edit.text())
@@ -303,12 +338,25 @@ class AlgebraTab(WorksheetTab):
                 "their unknown randomly from whichever letters you enter.",
             )
             return False
+
+        if self.operation_combo.currentText() == "Mixed" and not self._selected_operations():
+            self._show_error(
+                "No operations selected",
+                "Select at least one operation to mix together.",
+            )
+            return False
+
         return True
 
     def _generate_one(self, families, output_path=None, output_dir=None, seed=None):
         operation = self.operation_combo.currentText()
+        entry = self.operations[operation]
+        operations = (
+            self._selected_operations() if operation == "Mixed" else [entry["op"]]
+        )
         return generate_algebra_sheet(
             operation=operation,
+            operations=operations,
             families=families,
             max_factor=MAX_FACTOR,
             count=DEFAULT_ALG_COUNT,
@@ -316,7 +364,8 @@ class AlgebraTab(WorksheetTab):
             unknown=self.unknown_line_edit.text(),
             output_path=output_path,
             output_dir=output_dir,
-            **self.operations[operation],
+            typst_file=entry["typst_file"],
+            output_prefix=entry["output_prefix"],
         )
 
 

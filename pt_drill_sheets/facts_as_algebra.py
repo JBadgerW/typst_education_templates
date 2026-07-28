@@ -25,6 +25,17 @@ ALGEBRA_OPERATIONS = {
         "output_prefix": "alg_div_facts",
         "op": "division",
     },
+    "Mixed": {
+        "typst_file": "algebra_1.typ",
+        "output_prefix": "alg_mixed_facts",
+    },
+}
+
+OPERATION_SYMBOLS = {
+    "addition": "+",
+    "subtraction": "-",
+    "multiplication": "×",
+    "division": "÷",
 }
 
 
@@ -67,7 +78,7 @@ def parse_unknown_letters(raw):
     return letters
 
 
-def generate_algebra_problems(families, max_factor, count, rng, unknown_letters):
+def generate_algebra_problems(families, max_factor, count, rng, unknown_letters, operations):
     family_list = list(families) if families else list(range(1, max_factor + 1))
     facts = fact_families.get_facts(
         families=family_list, num_facts=count, max_factor=max_factor, rng=rng
@@ -78,6 +89,7 @@ def generate_algebra_problems(families, max_factor, count, rng, unknown_letters)
             "member": member,
             "reverse": rng.choice([True, False]),
             "unknown": rng.choice(unknown_letters),
+            "operation": rng.choice(operations),
         }
         for family, member in facts
     ]
@@ -90,9 +102,9 @@ def generate_algebra_sheet(
     count,
     seed,
     unknown,
+    operations,
     typst_file,
     output_prefix,
-    op,
     output_path=None,
     output_dir=None,
 ):
@@ -101,15 +113,19 @@ def generate_algebra_sheet(
 
     unknown_letters = parse_unknown_letters(unknown)
     problems = generate_algebra_problems(
-        families, max_factor, count, rng, unknown_letters
+        families, max_factor, count, rng, unknown_letters, operations
     )
 
     letters_str = ", ".join(unknown_letters)
+    ws_details = f"Solve for the unknown. Families: {format_family_ranges(families, max_factor)}"
+    if operation == "Mixed":
+        ops_str = ", ".join(OPERATION_SYMBOLS[op] for op in operations)
+        ws_details += f". Operations: {ops_str}"
+
     data = {
         "seed": seed,
         "title": f"Algebra: {operation} Facts",
-        "ws-details": f"Solve for the unknown. Families: {format_family_ranges(families, max_factor)}",
-        "operation": op,
+        "ws-details": ws_details,
         "problems": problems,
     }
 
