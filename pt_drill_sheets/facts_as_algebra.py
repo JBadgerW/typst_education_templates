@@ -35,7 +35,7 @@ OPERATION_SYMBOLS = {
     "addition": "+",
     "subtraction": "-",
     "multiplication": "×",
-    "division": "÷",
+    "division": "/",
 }
 
 
