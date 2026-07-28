@@ -66,7 +66,7 @@
 
   stack(
     dir: ttb,
-    spacing: 0.3em,
+    spacing: 0.7em,
     align(center)[$#lhs = #rhs$],
     if answer {
       align(center)[
