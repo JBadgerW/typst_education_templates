@@ -28,7 +28,7 @@ Addition) plus `--unknown` (default `x`): non-letter characters are stripped and
 letters deduped into a set, then each problem draws its own unknown letter randomly from that set
 (so e.g. `--unknown xyn` mixes x/y/n across a sheet). Otherwise it takes the same flags.
 
-Run the desktop GUI (Tkinter) instead of the CLI:
+Run the desktop GUI (PySide6) instead of the CLI:
 
 ```
 python drill_sheet_gui.py
@@ -59,12 +59,12 @@ is its CLI wrapper. Python only decides *which* problems, *which side* is hidden
 is used — the actual equation text, the per-operation identity (e.g. subtraction's
 `x - family = member`), and the red/bold answer are entirely Typst's job in `algebra_1.typ`.
 
-**`drill_sheet_gui.py`** is a Tkinter/ttk GUI, structured as a `ttk.Notebook` with one tab per
+**`drill_sheet_gui.py`** is a PySide6 GUI, structured as a `QTabWidget` with one tab per
 worksheet family: `FactSheetTab` (plain fact sheets) and `AlgebraTab` (algebra sheets, with an added
-"unknown letter" field). Both subclass `WorksheetTab`, which holds the shared scaffolding (operation
-dropdown, fact-family checkboxes, versions row, Save/Save As) and calls each subclass's
-`_generate_one`. Add a new worksheet family by subclassing `WorksheetTab` and adding it to the
-`notebook.add(...)` calls in `main()`.
+"unknown letter" field). Both subclass `WorksheetTab` (a `QWidget`), which holds the shared
+scaffolding (operation dropdown, fact-family checkboxes, versions row, Save/Save As) and calls each
+subclass's `_generate_one`. Add a new worksheet family by subclassing `WorksheetTab` and adding it to
+the `addTab(...)` calls in `main()`.
 
 **Typst side** — each operation has its own template (`multiplication_1.typ`, `division_1.typ`,
 `addition_1.typ`, `subtraction_1.typ`), rendering a compact stacked-digit glyph per problem.
