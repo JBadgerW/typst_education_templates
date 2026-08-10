@@ -1,0 +1,11 @@
+{
+  "title": "Sample Set",
+  "problems": [
+    { "question": "Solve for $x$: $3x + 7 = 22$", "answer": "$x = 5$" },
+    { "question": "Factor: $x^2 - 5x + 6$", "answer": "$(x - 2)(x - 3)$" },
+    { "question": "Simplify: $(2x^3)(4x^2)$", "answer": "$8x^5$" },
+    { "question": "Find the slope of the line through $(2, 3)$ and $(6, 11)$.", "answer": "$m = 2$" },
+    { "question": "What is $17 times 24$?", "answer": "$408$" },
+    { "question": "Find the distance between $(2, 3)$ and $(6, 11)$.", "answer": "$ sqrt((6-2)^2 + (11-3)^2) = sqrt(80) = 4 sqrt(5) $" }
+  ]
+}

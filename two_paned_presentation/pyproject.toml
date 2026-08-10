@@ -1,0 +1,8 @@
+[project]
+name = "two-paned-presentation"
+version = "0.1.0"
+description = "Build step for the whiteboard problem-queue board: compiles Typst-markup problem sets to board.json"
+requires-python = ">=3.11"
+dependencies = [
+    "typst==0.15.0",
+]

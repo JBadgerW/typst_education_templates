@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Problems</title>
+<link rel="stylesheet" href="board.css">
+</head>
+<body>
+
+<div id="overlay">
+  <div class="panel-count-row" id="panel-count-row">
+    <button type="button" data-count="1">1</button>
+    <button type="button" data-count="2">2</button>
+    <button type="button" data-count="3">3</button>
+    <button type="button" data-count="4">4</button>
+  </div>
+
+  <div id="dropzone">
+    Drop a problem set (.json) here, or click to choose a file
+    <div class="error" id="load-error"></div>
+  </div>
+  <input type="file" id="file-input" accept="application/json,.json" hidden>
+</div>
+
+<div id="board"></div>
+
+<script src="board.js"></script>
+<script>
+  function clamp(n, lo, hi) {
+    return Math.min(hi, Math.max(lo, n));
+  }
+
+  const requestedPanes = parseInt(new URLSearchParams(location.search).get('panes'), 10);
+  let paneCount = clamp(Number.isFinite(requestedPanes) ? requestedPanes : 2, 1, 4);
+
+  const countButtons = document.querySelectorAll('#panel-count-row button');
+  function updateButtonSelection() {
+    countButtons.forEach((btn) => {
+      btn.classList.toggle('selected', Number(btn.dataset.count) === paneCount);
+    });
+  }
+  countButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      paneCount = Number(btn.dataset.count);
+      updateButtonSelection();
+    });
+  });
+  updateButtonSelection();
+
+  const boardEl = document.getElementById('board');
+  let paneEls = [];
+  let controller = null;
+
+  function buildPanes(count) {
+    boardEl.innerHTML = '';
+    paneEls = [];
+    for (let i = 0; i < count; i++) {
+      const pane = document.createElement('div');
+      pane.className = 'pane';
+      pane.addEventListener('click', () => controller.handleClick(i));
+      boardEl.appendChild(pane);
+      paneEls.push(pane);
+    }
+  }
+
+  Board.initLoader({
+    dropZoneEl: document.getElementById('dropzone'),
+    fileInputEl: document.getElementById('file-input'),
+    errorEl: document.getElementById('load-error'),
+    onLoaded: ({ problems, title }) => {
+      if (title) document.title = title;
+      buildPanes(paneCount);
+      controller = Board.createController(paneCount, paneEls);
+      controller.loadProblems(problems);
+      document.body.classList.add('loaded');
+    },
+  });
+
+  // Digit keys 1-N select a pane by position, generalizing the old
+  // arrow-key / a,l shortcuts to any pane count.
+  document.addEventListener('keydown', (e) => {
+    if (!controller) return;
+    const n = Number(e.key);
+    if (Number.isInteger(n) && n >= 1 && n <= paneCount) {
+      controller.handleClick(n - 1);
+    }
+  });
+</script>
+</body>
+</html>

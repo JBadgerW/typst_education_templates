@@ -1,0 +1,108 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #fff;
+  overflow: hidden;
+  font-family: "New Computer Modern", Georgia, serif;
+}
+
+/* ---------- Pre-load overlay ---------- */
+
+#overlay {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+body.loaded #overlay { display: none; }
+
+.panel-count-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.panel-count-row button {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.25rem;
+  font-family: inherit;
+  border: 2px solid #333;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.panel-count-row button.selected {
+  background: #333;
+  color: #fff;
+}
+
+#dropzone {
+  width: 28rem;
+  max-width: 80vw;
+  padding: 2.5rem 1.5rem;
+  border: 3px dashed #999;
+  border-radius: 8px;
+  text-align: center;
+  color: #555;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+#dropzone.dragover {
+  border-color: #333;
+  background: #f4f4f4;
+}
+
+#dropzone .error {
+  margin-top: 1rem;
+  color: #b00000;
+  font-size: 0.95rem;
+}
+
+/* ---------- Board ---------- */
+
+#board {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+body.loaded #board { display: flex; }
+
+.pane {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.pane:not(:last-child) {
+  border-right: 2px solid #000;
+}
+
+.pane svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  pointer-events: none;
+}
+
+.done {
+  font-size: 2rem;
+  color: #000;
+  pointer-events: none;
+}
